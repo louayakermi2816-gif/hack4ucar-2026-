@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.upload import router as upload_router
 from app.api.data import router as data_router
+from app.api.auth import router as auth_router
+from app.api.aggregation import router as aggregation_router
 
 app = FastAPI(title="HACK4UCAR 2025 API", version="0.1.0")
 
@@ -15,6 +17,8 @@ app.add_middleware(
 
 app.include_router(upload_router)
 app.include_router(data_router)
+app.include_router(auth_router)
+app.include_router(aggregation_router)
 
 
 @app.get("/health")

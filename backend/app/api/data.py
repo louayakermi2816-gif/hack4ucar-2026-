@@ -1,5 +1,6 @@
 """
 data.py — GET endpoints for the frontend to fetch KPI data.
+All endpoints require authentication (JWT token).
 """
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -7,15 +8,19 @@ from app.models.base import get_db
 from app.models.models import (
     Institution, AcademicRecord, EmploymentRecord, FinanceRecord,
     EsgRecord, HrRecord, ResearchRecord, InfrastructureRecord,
-    PartnershipRecord, Alert, Document
+    PartnershipRecord, Alert, Document, User
 )
+from app.services.auth import get_current_user
 
 router = APIRouter(prefix="/api", tags=["data"])
 
 
 @router.get("/institutions")
-def list_institutions(db: Session = Depends(get_db)):
-    rows = db.query(Institution).order_by(Institution.name).all()
+def list_institutions(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    query = db.query(Institution)
+    if user.role == "dean":
+        query = query.filter(Institution.id == user.institution_id)
+    rows = query.order_by(Institution.name).all()
     return [
         {
             "id": str(r.id),
@@ -28,7 +33,9 @@ def list_institutions(db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}")
-def get_institution(inst_id: str, db: Session = Depends(get_db)):
+def get_institution(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    if user.role == "dean" and str(user.institution_id) != inst_id:
+        raise HTTPException(403, "You can only view your own institution")
     inst = db.query(Institution).filter(Institution.id == inst_id).first()
     if not inst:
         raise HTTPException(404, "Institution not found")
@@ -41,7 +48,7 @@ def get_institution(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/academic")
-def get_academic(inst_id: str, db: Session = Depends(get_db)):
+def get_academic(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(AcademicRecord).filter(
         AcademicRecord.institution_id == inst_id
     ).order_by(AcademicRecord.semester).all()
@@ -56,7 +63,7 @@ def get_academic(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/employment")
-def get_employment(inst_id: str, db: Session = Depends(get_db)):
+def get_employment(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(EmploymentRecord).filter(
         EmploymentRecord.institution_id == inst_id
     ).order_by(EmploymentRecord.year).all()
@@ -73,7 +80,7 @@ def get_employment(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/finance")
-def get_finance(inst_id: str, db: Session = Depends(get_db)):
+def get_finance(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(FinanceRecord).filter(
         FinanceRecord.institution_id == inst_id
     ).order_by(FinanceRecord.period).all()
@@ -90,7 +97,7 @@ def get_finance(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/esg")
-def get_esg(inst_id: str, db: Session = Depends(get_db)):
+def get_esg(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(EsgRecord).filter(
         EsgRecord.institution_id == inst_id
     ).order_by(EsgRecord.period).all()
@@ -105,7 +112,7 @@ def get_esg(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/hr")
-def get_hr(inst_id: str, db: Session = Depends(get_db)):
+def get_hr(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(HrRecord).filter(
         HrRecord.institution_id == inst_id
     ).order_by(HrRecord.period).all()
@@ -122,7 +129,7 @@ def get_hr(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/research")
-def get_research(inst_id: str, db: Session = Depends(get_db)):
+def get_research(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(ResearchRecord).filter(
         ResearchRecord.institution_id == inst_id
     ).order_by(ResearchRecord.year).all()
@@ -137,7 +144,7 @@ def get_research(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/infrastructure")
-def get_infrastructure(inst_id: str, db: Session = Depends(get_db)):
+def get_infrastructure(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(InfrastructureRecord).filter(
         InfrastructureRecord.institution_id == inst_id
     ).all()
@@ -153,7 +160,7 @@ def get_infrastructure(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/institutions/{inst_id}/partnership")
-def get_partnership(inst_id: str, db: Session = Depends(get_db)):
+def get_partnership(inst_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(PartnershipRecord).filter(
         PartnershipRecord.institution_id == inst_id
     ).all()
@@ -169,7 +176,7 @@ def get_partnership(inst_id: str, db: Session = Depends(get_db)):
 
 
 @router.get("/alerts")
-def list_alerts(db: Session = Depends(get_db)):
+def list_alerts(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(Alert).order_by(Alert.triggered_at.desc()).all()
     return [
         {
@@ -186,7 +193,7 @@ def list_alerts(db: Session = Depends(get_db)):
 
 
 @router.get("/documents")
-def list_documents(db: Session = Depends(get_db)):
+def list_documents(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     rows = db.query(Document).order_by(Document.uploaded_at.desc()).all()
     return [
         {

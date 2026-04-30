@@ -2,23 +2,64 @@
 parser.py — Reads uploaded CSV / Excel files and returns extracted rows.
 """
 import pandas as pd
+import pdfplumber
 from io import BytesIO
 from typing import List, Dict, Any
 
 
+def parse_pdf(file_bytes: bytes) -> List[Dict[str, Any]]:
+    """
+    Extract tables from a PDF file using pdfplumber.
+    """
+    buf = BytesIO(file_bytes)
+    records = []
+    
+    with pdfplumber.open(buf) as pdf:
+        for page in pdf.pages:
+            tables = page.extract_tables()
+            for table in tables:
+                if not table or len(table) < 2:
+                    continue
+                
+                # Assume the first row is the header
+                header = table[0]
+                
+                # Clean header names (lowercase, no spaces)
+                clean_header = [
+                    str(c).strip().lower().replace(" ", "_").replace("\n", "") 
+                    if c else f"col_{i}" 
+                    for i, c in enumerate(header)
+                ]
+                
+                # Process rows
+                for row in table[1:]:
+                    if len(row) == len(clean_header):
+                        record = dict(zip(clean_header, row))
+                        # Basic data type conversion (e.g. "85.5%" -> 85.5)
+                        for k, v in record.items():
+                            if isinstance(v, str):
+                                cleaned_v = v.strip().replace("%", "").replace(",", ".")
+                                try:
+                                    record[k] = float(cleaned_v)
+                                except ValueError:
+                                    pass
+                        records.append(record)
+                        
+    return records
+
+
 def parse_file(file_bytes: bytes, filename: str) -> List[Dict[str, Any]]:
     """
-    Read a CSV or Excel file and return rows as a list of dicts.
-
-    Example output:
-    [
-        {"success_rate": 72.3, "dropout_rate": 8.1, "semester": "S1-2025"},
-        {"success_rate": 68.9, "dropout_rate": 10.3, "semester": "S2-2025"},
-    ]
+    Read a CSV, Excel, or PDF file and return rows as a list of dicts.
     """
     ext = filename.rsplit(".", 1)[-1].lower()
+    
+    # Handle PDF files
+    if ext == "pdf":
+        return parse_pdf(file_bytes)
+        
+    # Handle Excel / CSV files
     buf = BytesIO(file_bytes)
-
     if ext == "csv":
         df = pd.read_csv(buf)
     elif ext in ("xlsx", "xls"):
@@ -36,6 +77,7 @@ def parse_file(file_bytes: bytes, filename: str) -> List[Dict[str, Any]]:
     records = df.to_dict(orient="records")
 
     return records
+
 
 
 def detect_data_type(columns: List[str]) -> str:

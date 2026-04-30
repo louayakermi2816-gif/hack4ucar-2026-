@@ -239,3 +239,20 @@ class ChatMessage(Base):
     created_at = Column(DateTime(timezone=True), default=now_utc)
 
     session    = relationship("ChatSession", back_populates="messages")
+
+
+# ── 15. users ─────────────────────────────────────────────────────────────
+class User(Base):
+    __tablename__ = "users"
+
+    id              = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    email           = Column(String, unique=True, nullable=False, index=True)
+    hashed_password = Column(String, nullable=False)
+    full_name       = Column(String, nullable=False)
+    role            = Column(String, nullable=False)  # president / dean / admin / researcher / student
+    institution_id  = Column(UUID(as_uuid=True), ForeignKey("institutions.id"), nullable=True)
+    is_active       = Column(Integer, default=1)
+    created_at      = Column(DateTime(timezone=True), default=now_utc)
+
+    institution     = relationship("Institution")
+

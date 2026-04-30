@@ -1,0 +1,51 @@
+{
+  "login": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "button": "Sign In",
+    "loading": "Signing in...",
+    "demo_accounts": "Demo Accounts:",
+    "no_account": "Don't have an account?",
+    "signup": "Sign Up"
+  },
+  "register": {
+    "title": "Create Account",
+    "full_name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "role": "Role",
+    "roles": {
+      "student": "Student",
+      "researcher": "Researcher",
+      "dean": "Dean",
+      "admin": "Admin"
+    },
+    "secret_code": "UCAR Authorization Code",
+    "button": "Sign Up",
+    "loading": "Creating...",
+    "has_account": "Already have an account?",
+    "signin": "Sign In"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "institutions": "Institutions",
+    "alerts": "Alerts",
+    "upload": "Ingestion",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "UCAR Overview",
+    "subtitle": "University of Carthage",
+    "cards": {
+      "institutions": "Institutions",
+      "success_rate": "Avg Success Rate",
+      "budget": "Total Allocated Budget (TND)",
+      "alerts": "Active Alerts"
+    },
+    "charts": {
+      "success_ranking": "Top 10 — Success Rate",
+      "type_distribution": "Distribution by Type"
+    }
+  }
+}

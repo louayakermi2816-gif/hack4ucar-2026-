@@ -1,0 +1,51 @@
+{
+  "login": {
+    "title": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "button": "دخول",
+    "loading": "جاري الدخول...",
+    "demo_accounts": "حسابات تجريبية:",
+    "no_account": "ليس لديك حساب؟",
+    "signup": "إنشاء حساب"
+  },
+  "register": {
+    "title": "إنشاء حساب",
+    "full_name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "role": "الدور",
+    "roles": {
+      "student": "طالب",
+      "researcher": "باحث",
+      "dean": "عميد",
+      "admin": "مسؤول"
+    },
+    "secret_code": "رمز المصادقة (UCAR)",
+    "button": "تسجيل",
+    "loading": "جاري الإنشاء...",
+    "has_account": "لديك حساب بالفعل؟",
+    "signin": "تسجيل الدخول"
+  },
+  "sidebar": {
+    "dashboard": "لوحة القيادة",
+    "institutions": "المؤسسات",
+    "alerts": "التنبيهات",
+    "upload": "إدراج البيانات",
+    "logout": "تسجيل الخروج"
+  },
+  "dashboard": {
+    "title": "نظرة عامة (UCAR)",
+    "subtitle": "جامعة قرطاج",
+    "cards": {
+      "institutions": "المؤسسات",
+      "success_rate": "متوسط نسبة النجاح",
+      "budget": "إجمالي الميزانية المخصصة (TND)",
+      "alerts": "تنبيهات نشطة"
+    },
+    "charts": {
+      "success_ranking": "أفضل 10 - نسبة النجاح",
+      "type_distribution": "التوزيع حسب النوع"
+    }
+  }
+}
