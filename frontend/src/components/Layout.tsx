@@ -15,7 +15,7 @@ import { useAuth } from "../auth";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../ThemeProvider";
-import { Moon, Sun, Globe, LogOut, Menu, LayoutDashboard, Building2, Bell, Upload } from "lucide-react";
+import { Moon, Sun, Globe, LogOut, Menu, LayoutDashboard, Building2, Bell, Upload, MessageSquare } from "lucide-react";
 
 const roleBadgeColors: Record<string, string> = {
   president: "bg-purple-500/20 text-purple-600 dark:text-purple-300 border-purple-500/30",
@@ -42,6 +42,7 @@ export default function Layout() {
     { to: "/institutions", icon: <Building2 size={20} />, label: t('sidebar.institutions'), roles: ["president", "dean", "admin", "researcher"] },
     { to: "/alerts", icon: <Bell size={20} />, label: t('sidebar.alerts'), roles: ["president", "dean", "admin", "researcher"] },
     { to: "/upload", icon: <Upload size={20} />, label: t('sidebar.upload'), roles: ["admin"] },
+    { to: "/chat", icon: <MessageSquare size={20} />, label: "Assistant IA", roles: ["president", "dean", "admin", "researcher"] },
   ];
 
   const visibleItems = navItems.filter((item) => item.roles.includes(user.role));

@@ -177,7 +177,10 @@ def get_partnership(inst_id: str, db: Session = Depends(get_db), user: User = De
 
 @router.get("/alerts")
 def list_alerts(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    rows = db.query(Alert).order_by(Alert.triggered_at.desc()).all()
+    q = db.query(Alert)
+    if user.role == "dean" and user.institution_id:
+        q = q.filter(Alert.institution_id == user.institution_id)
+    rows = q.order_by(Alert.triggered_at.desc()).all()
     return [
         {
             "id": str(r.id),
@@ -194,7 +197,10 @@ def list_alerts(db: Session = Depends(get_db), user: User = Depends(get_current_
 
 @router.get("/documents")
 def list_documents(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
-    rows = db.query(Document).order_by(Document.uploaded_at.desc()).all()
+    q = db.query(Document)
+    if user.role == "dean" and user.institution_id:
+        q = q.filter(Document.institution_id == user.institution_id)
+    rows = q.order_by(Document.uploaded_at.desc()).all()
     return [
         {
             "id": str(r.id),

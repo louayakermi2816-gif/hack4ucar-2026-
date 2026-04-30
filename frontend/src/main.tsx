@@ -33,6 +33,8 @@ import InstitutionsList from "./pages/Institutions";
 import InstitutionDetail from "./pages/InstitutionDetail";
 import AlertsPage from "./pages/Alerts";
 import UploadPage from "./pages/Upload";
+import Chat from "./pages/chat";
+
 
 // React Query client — caches API responses for 30 seconds
 const queryClient = new QueryClient({
@@ -75,8 +77,9 @@ createRoot(document.getElementById("root")!).render(
                 <Route index element={<Dashboard />} />
                 <Route path="institutions" element={<InstitutionsList />} />
                 <Route path="institutions/:id" element={<InstitutionDetail />} />
-                <Route path="alerts" element={<AlertsPage />} />
                 <Route path="upload" element={<UploadPage />} />
+                <Route path="chat" element={<Chat />} />
+                <Route path="alerts" element={<AlertsPage />} />
               </Route>
 
               {/* Catch-all — redirect unknown URLs to dashboard */}
