@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.upload import router as upload_router
+from app.api.data import router as data_router
 
 app = FastAPI(title="HACK4UCAR 2025 API", version="0.1.0")
 
@@ -10,6 +12,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(upload_router)
+app.include_router(data_router)
+
 
 @app.get("/health")
 def health():
