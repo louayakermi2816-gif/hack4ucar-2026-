@@ -45,10 +45,12 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
         func.avg(AcademicRecord.success_rate),
         func.avg(AcademicRecord.dropout_rate),
         func.avg(AcademicRecord.attendance_rate),
+        func.sum(AcademicRecord.enrolled_students),
     )
     if dean:
         acad_q = acad_q.filter(AcademicRecord.institution_id == user.institution_id)
-    avg_success, avg_dropout, avg_attendance = acad_q.one()
+    avg_success, avg_dropout, avg_attendance, total_enrolled = acad_q.one()
+    total_enrolled = total_enrolled or 0
 
     # Finance totals
     fin_q = db.query(
@@ -60,16 +62,28 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
     total_budget, total_consumed = fin_q.one()
 
     # HR totals
-    hr_q = db.query(func.sum(HrRecord.teaching_staff_count + HrRecord.admin_staff_count))
+    hr_q = db.query(
+        func.sum(HrRecord.teaching_staff_count + HrRecord.admin_staff_count),
+        func.sum(HrRecord.teaching_staff_count),
+    )
     if dean:
         hr_q = hr_q.filter(HrRecord.institution_id == user.institution_id)
-    total_staff = hr_q.scalar()
+    total_staff, teaching_staff = hr_q.one()
+    total_staff = total_staff or 0
+    teaching_staff = teaching_staff or 0
+    
+    faculty_to_student_ratio = round(total_enrolled / teaching_staff, 1) if teaching_staff and teaching_staff > 0 else 0
 
     # Research totals
-    res_q = db.query(func.sum(ResearchRecord.publications), func.sum(ResearchRecord.patents))
+    res_q = db.query(
+        func.sum(ResearchRecord.publications), 
+        func.sum(ResearchRecord.patents),
+        func.sum(ResearchRecord.funding_secured),
+    )
     if dean:
         res_q = res_q.filter(ResearchRecord.institution_id == user.institution_id)
-    total_publications, total_patents = res_q.one()
+    total_publications, total_patents, funding_secured = res_q.one()
+    funding_secured = funding_secured or 0
 
     # Alerts
     alert_q = db.query(func.count(Alert.id)).filter(Alert.resolved_at.is_(None))
@@ -84,16 +98,22 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
             "avg_success_rate": round(avg_success, 1) if avg_success else 0,
             "avg_dropout_rate": round(avg_dropout, 1) if avg_dropout else 0,
             "avg_attendance_rate": round(avg_attendance, 1) if avg_attendance else 0,
+            "total_enrolled_students": total_enrolled,
         },
         "finance": {
             "total_budget_allocated": round(total_budget, 0) if total_budget else 0,
             "total_budget_consumed": round(total_consumed, 0) if total_consumed else 0,
             "utilization_rate": round((total_consumed / total_budget * 100), 1) if total_budget and total_consumed else 0,
         },
-        "hr": {"total_staff": total_staff or 0},
+        "hr": {
+            "total_staff": total_staff,
+            "teaching_staff": teaching_staff,
+            "faculty_to_student_ratio": faculty_to_student_ratio,
+        },
         "research": {
             "total_publications": total_publications or 0,
             "total_patents": total_patents or 0,
+            "funding_secured": round(funding_secured, 0),
         },
         "active_alerts": active_alerts or 0,
     }

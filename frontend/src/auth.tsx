@@ -12,8 +12,9 @@
  * 3. Login → sends credentials, saves token, stores user
  * 4. Logout → clears token and user, redirects to /login
  */
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext, useContext, useState, useEffect } from "react";
+import type { ReactNode } from "react";
+
 import api from "./api";
 
 // Shape of the user object
@@ -32,6 +33,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isRole: (...roles: string[]) => boolean;
+  updateInstitution: (institutionId: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -87,8 +89,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return user ? roles.includes(user.role) : false;
   };
 
+  const updateInstitution = async (institutionId: string) => {
+    const res = await api.put("/api/auth/me/institution", { institution_id: institutionId });
+    setUser(res.data);
+    localStorage.setItem("user", JSON.stringify(res.data));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, isRole }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, isRole, updateInstitution }}>
       {children}
     </AuthContext.Provider>
   );

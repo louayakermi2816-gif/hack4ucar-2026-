@@ -13,7 +13,7 @@ from app.models.models import (
     InfrastructureRecord, PartnershipRecord, Alert
 )
 
-DATABASE_URL = "postgresql://hack4ucar:secret@db:5432/hack4ucar_db"
+DATABASE_URL = "postgresql://hack4ucar:secret@localhost:5432/hack4ucar_db"
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 db = Session()
@@ -23,6 +23,9 @@ random.seed(42)  # reproducible results
 
 # ── Clear old data ────────────────────────────────────────────────────────
 print("Clearing old data...")
+db.execute(text("UPDATE users SET institution_id = NULL"))
+db.commit()
+
 for table in [
     "alerts", "chat_messages", "chat_sessions", "reports",
     "partnership_records", "infrastructure_records", "research_records",
@@ -107,9 +110,9 @@ semesters = ["S1-2025", "S2-2025"]
 
 # Base rates by institution type
 base_rates = {
-    "école":    {"success": 76, "attendance": 85, "repetition": 11, "dropout": 5},
-    "faculté":  {"success": 65, "attendance": 74, "repetition": 18, "dropout": 12},
-    "institut": {"success": 71, "attendance": 80, "repetition": 14, "dropout": 8},
+    "école":    {"success": 76, "attendance": 85, "repetition": 11, "dropout": 5, "students": 1200},
+    "faculté":  {"success": 65, "attendance": 74, "repetition": 18, "dropout": 12, "students": 4500},
+    "institut": {"success": 71, "attendance": 80, "repetition": 14, "dropout": 8, "students": 2500},
 }
 
 for inst in institutions:
@@ -117,6 +120,7 @@ for inst in institutions:
     for sem in semesters:
         db.add(AcademicRecord(
             id=uuid.uuid4(), institution_id=inst.id, semester=sem,
+            enrolled_students=int(vary(rates["students"], 10)),
             success_rate=vary(rates["success"]),
             attendance_rate=vary(rates["attendance"]),
             repetition_rate=vary(rates["repetition"]),

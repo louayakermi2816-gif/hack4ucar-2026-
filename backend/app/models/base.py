@@ -1,6 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 import os
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.path.dirname(__file__), "../../../.env"))
 
 # credentials live in .env — never hardcoded in real code
 DATABASE_URL = os.getenv("DATABASE_URL")

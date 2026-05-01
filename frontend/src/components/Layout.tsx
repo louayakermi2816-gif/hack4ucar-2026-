@@ -1,157 +1,157 @@
-/**
- * Layout.tsx — Main dashboard layout with sidebar + topbar.
- *
- * This wraps all dashboard pages. The <Outlet /> renders the current page
- * based on the URL (React Router's nested routing).
- *
- * Sidebar navigation changes based on role:
- * - President: sees everything
- * - Dean: sees only their institution data
- * - Admin: sees everything + upload
- * - Researcher: sees everything (read-only)
- */
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../auth";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import {
+  LogOut, LayoutDashboard, Users, GraduationCap, Microscope,
+  CircleDollarSign, Building2, LineChart, Settings, Search,
+  Bell, Target, ChevronRight, Sun, Moon
+} from "lucide-react";
+import FacultySelectionModal from "./FacultySelectionModal";
+import AIChatBubble from "./AIChatBubble";
 import { useTheme } from "../ThemeProvider";
-import { Moon, Sun, Globe, LogOut, Menu, LayoutDashboard, Building2, Bell, Upload, MessageSquare } from "lucide-react";
-
-const roleBadgeColors: Record<string, string> = {
-  president: "bg-purple-500/20 text-purple-600 dark:text-purple-300 border-purple-500/30",
-  dean: "bg-blue-500/20 text-blue-600 dark:text-blue-300 border-blue-500/30",
-  admin: "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border-emerald-500/30",
-  researcher: "bg-amber-500/20 text-amber-600 dark:text-amber-300 border-amber-500/30",
-};
 
 export default function Layout() {
   const { user, logout } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { t, i18n } = useTranslation();
+  const [showFacultyModal, setShowFacultyModal] = useState(false);
+  const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
 
   if (!user) return null;
 
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === 'fr' ? 'en' : i18n.language === 'en' ? 'ar' : 'fr';
-    i18n.changeLanguage(nextLang);
-  };
-
   const navItems = [
-    { to: "/", icon: <LayoutDashboard size={20} />, label: t('sidebar.dashboard'), roles: ["president", "dean", "admin", "researcher"] },
-    { to: "/institutions", icon: <Building2 size={20} />, label: t('sidebar.institutions'), roles: ["president", "dean", "admin", "researcher"] },
-    { to: "/alerts", icon: <Bell size={20} />, label: t('sidebar.alerts'), roles: ["president", "dean", "admin", "researcher"] },
-    { to: "/upload", icon: <Upload size={20} />, label: t('sidebar.upload'), roles: ["admin"] },
-    { to: "/chat", icon: <MessageSquare size={20} />, label: "Assistant IA", roles: ["president", "dean", "admin", "researcher"] },
+    { id: "/", icon: <LayoutDashboard size={19} />, label: "Dashboard", roles: ["president", "dean", "admin", "researcher"] },
+    { id: "/enrollment", icon: <Users size={19} />, label: "Enrollment", roles: ["president", "dean", "admin"] },
+    { id: "/academic", icon: <GraduationCap size={19} />, label: "Academic Affairs", roles: ["president", "dean", "admin"] },
+    { id: "/research", icon: <Microscope size={19} />, label: "Research & Grants", roles: ["president", "dean", "admin", "researcher"] },
+    { id: "/finance", icon: <CircleDollarSign size={19} />, label: "Finance", roles: ["president", "admin"] },
+    { id: "/faculty", icon: <Users size={19} />, label: "Faculty & Staff", roles: ["president", "dean", "admin"] },
+    { id: "/facilities", icon: <Building2 size={19} />, label: "Facilities", roles: ["president", "admin"] },
+    { id: "/strategy", icon: <Target size={19} />, label: "Strategy", roles: ["president", "dean"] },
+    { id: "/analytics", icon: <LineChart size={19} />, label: "Analytics", roles: ["president", "dean", "admin"] },
+    { id: "/settings", icon: <Settings size={19} />, label: "Settings", roles: ["admin", "president"] },
   ];
 
-  const visibleItems = navItems.filter((item) => item.roles.includes(user.role));
+  const activeNav = navItems.filter(item => item.roles.includes(user.role));
+  const currentPage = navItems.find((item) => item.id === location.pathname);
+
+  const accent = isDark ? '#D4AF37' : '#3b82f6';
+  const accentGlow = isDark ? 'rgba(212,175,55,0.4)' : 'rgba(59,130,246,0.4)';
 
   return (
-    <div className="flex h-screen overflow-hidden bg-bg text-text-main transition-colors duration-300">
-      {/* Sidebar */}
-      <aside
-        className={`${
-          sidebarOpen ? "w-64" : "w-20"
-        } bg-sidebar border-r border-border flex flex-col transition-all duration-300 shrink-0 shadow-lg z-20 relative`}
-      >
-        {/* Brand */}
-        <div className="h-16 flex items-center px-5 border-b border-border">
-          <span className="text-xl">🎓</span>
-          {sidebarOpen && (
-            <span className="ml-3 text-lg font-bold tracking-tight">
-              Ucar<span className="text-ucar-500 dark:text-ucar-400">OS</span>
-            </span>
-          )}
+    <div className="flex h-screen overflow-hidden font-sans" style={{ background: 'var(--uc-bg)', transition: 'background 0.3s' }}>
+
+      {/* ═══ SIDEBAR ═══ */}
+      <aside className="uc-sidebar flex flex-col shrink-0 z-20" style={{ width: 250, minHeight: '100vh' }}>
+        {/* Logo */}
+        <div className="flex flex-col items-center justify-center shrink-0" style={{ paddingTop: 36, paddingBottom: 32 }}>
+          <div
+            key={theme}
+            className="uc-logo-text"
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif", fontSize: 48, fontWeight: 700,
+              lineHeight: 1, letterSpacing: '-0.02em',
+              background: `linear-gradient(180deg, ${accent}, ${isDark ? '#f0cc6e' : '#60a5fa'})`,
+              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text', color: 'transparent',
+            }}
+          >UC</div>
+          <div style={{
+            fontFamily: "'Playfair Display', Georgia, serif", fontSize: 10.5, fontWeight: 600,
+            textTransform: 'uppercase', letterSpacing: '0.2em', color: accent,
+            marginTop: 6, textAlign: 'center', lineHeight: 1.5, opacity: 0.85,
+          }}>University<br />Chancellor</div>
         </div>
 
+        <div className="uc-divider" style={{ marginLeft: 24, marginRight: 24, marginBottom: 12 }} />
+
         {/* Navigation */}
-        <nav className="flex-1 py-4 px-3 space-y-2 overflow-y-auto">
-          {visibleItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? "bg-ucar-500 text-white shadow-md shadow-ucar-500/30"
-                    : "text-text-muted hover:text-text-main hover:bg-border/50 border border-transparent"
-                }`
-              }
-            >
-              {item.icon}
-              {sidebarOpen && <span>{item.label}</span>}
-            </NavLink>
-          ))}
+        <nav className="flex-1 flex flex-col gap-0.5 overflow-y-auto py-3 px-3">
+          {activeNav.map((item) => {
+            const isActive = location.pathname === item.id;
+            return (
+              <NavLink key={item.id} to={item.id} end={item.id === "/"}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 14,
+                  padding: '12px 18px', borderRadius: 10, fontSize: 13.5,
+                  fontWeight: isActive ? 600 : 500, position: 'relative',
+                  textDecoration: 'none', transition: 'all 0.25s ease',
+                  color: isActive ? accent : 'var(--uc-sidebar-text)',
+                  background: isActive ? 'var(--uc-sidebar-active-bg)' : 'transparent',
+                }}
+                onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.color = 'var(--uc-sidebar-hover)'; e.currentTarget.style.background = 'var(--uc-sidebar-hover-bg)'; }}}
+                onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.color = 'var(--uc-sidebar-text)'; e.currentTarget.style.background = 'transparent'; }}}
+              >
+                {isActive && <div style={{ position: 'absolute', left: 0, top: 6, bottom: 6, width: 3, background: accent, borderRadius: '0 3px 3px 0', boxShadow: `0 0 10px ${accentGlow}` }} />}
+                <span className="shrink-0 flex justify-center items-center" style={{ width: 20 }}>{item.icon}</span>
+                <span>{item.label}</span>
+              </NavLink>
+            );
+          })}
         </nav>
 
-        {/* User info + Logout */}
-        <div className="p-4 border-t border-border bg-border/20">
-          {sidebarOpen && (
-            <div className="mb-3">
-              <p className="text-sm font-semibold truncate">{user.full_name}</p>
-              <span className={`inline-block mt-1 px-2.5 py-1 text-xs font-medium rounded-md border ${roleBadgeColors[user.role]}`}>
-                {t(`register.roles.${user.role}`, user.role)}
-              </span>
-            </div>
-          )}
-          <button
-            onClick={logout}
-            className="flex items-center justify-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm text-text-muted hover:text-red-500 hover:bg-red-500/10 transition-all cursor-pointer font-medium"
-          >
-            <LogOut size={18} />
-            {sidebarOpen && <span>{t('sidebar.logout')}</span>}
-          </button>
+        <div style={{ padding: '16px 0' }}>
+          <div style={{ height: 2, background: 'var(--uc-divider)', margin: '0 20px' }} />
         </div>
       </aside>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden relative">
-        {/* Top bar */}
-        <header className="h-16 bg-card/80 backdrop-blur-xl border-b border-border flex items-center px-6 shrink-0 z-10 shadow-sm">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 -ml-2 rounded-lg text-text-muted hover:text-text-main hover:bg-border/50 transition-colors cursor-pointer"
-          >
-            <Menu size={20} />
-          </button>
-          
-          <h2 className="text-lg font-semibold ml-4 hidden sm:block">
-            {t('dashboard.subtitle')}
-          </h2>
+      {/* ═══ MAIN ═══ */}
+      <main className="flex-1 flex flex-col overflow-hidden relative">
+        {/* Header */}
+        <header className="uc-header flex items-center justify-between shrink-0 z-10" style={{ height: 68, paddingLeft: 32, paddingRight: 32 }}>
+          <div className="flex items-center gap-2" style={{ fontSize: 13 }}>
+            <span style={{ color: 'var(--uc-text-muted)', fontWeight: 500 }}>University Chancellor</span>
+            <ChevronRight size={14} style={{ color: 'var(--uc-text-dim)' }} />
+            <span style={{ color: 'var(--uc-text-secondary)', fontWeight: 600 }}>{currentPage?.label || "Dashboard"}</span>
+          </div>
 
-          <div className="ml-auto flex items-center gap-2">
-            <span className="text-sm font-medium text-text-muted mr-4 hidden md:inline-block">
-              {user.email}
-            </span>
+          <div className="flex items-center gap-5">
+            <div className="relative hidden md:block">
+              <Search size={15} className="absolute top-1/2 -translate-y-1/2" style={{ left: 14, color: 'var(--uc-text-dim)' }} />
+              <input type="text" placeholder="Search..." className="uc-search-input" />
+            </div>
 
-            <button
-              onClick={toggleLanguage}
-              className="p-2 rounded-lg text-text-muted hover:text-text-main hover:bg-border/50 transition-colors flex items-center gap-1 cursor-pointer"
-              title="Change Language"
-            >
-              <Globe size={18} />
-              <span className="text-xs font-bold uppercase">{i18n.language}</span>
+            {/* Theme Toggle */}
+            <button className="uc-theme-toggle" onClick={() => setTheme(isDark ? 'light' : 'dark')} title="Toggle theme">
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
             </button>
 
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-lg text-text-muted hover:text-text-main hover:bg-border/50 transition-colors cursor-pointer"
-              title="Toggle Theme"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            <div style={{ width: 1, height: 28, background: 'var(--uc-border)' }} />
+
+            {/* User */}
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col items-end">
+                <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: accent, lineHeight: 1, marginBottom: 3 }}>{user.role}</span>
+                <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--uc-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.03em' }}>{user.full_name}</span>
+              </div>
+              <div className="uc-avatar">{user.full_name.substring(0, 2).toUpperCase()}</div>
+            </div>
+
+            <div className="relative cursor-pointer" style={{ color: 'var(--uc-text-muted)', transition: 'color 0.2s' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = accent; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--uc-text-muted)'; }}>
+              <Bell size={19} />
+              <div style={{ position: 'absolute', top: -2, right: -2, width: 8, height: 8, borderRadius: '50%', background: '#ef4444', border: '2px solid var(--uc-bell-dot-border)' }} />
+            </div>
+
+            <button onClick={logout} className="cursor-pointer" title="Logout"
+              style={{ color: 'var(--uc-text-muted)', transition: 'color 0.2s', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#f87171'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--uc-text-muted)'; }}>
+              <LogOut size={19} />
             </button>
           </div>
         </header>
 
-        {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto w-full">
-            <Outlet />
-          </div>
-        </main>
-      </div>
+        <div style={{ height: 1, background: 'var(--uc-divider)' }} />
+
+        <div className="flex-1 overflow-y-auto" style={{ padding: '32px 36px 80px 36px', background: 'var(--uc-content-radial)' }}>
+          <Outlet />
+        </div>
+      </main>
+
+      <FacultySelectionModal isOpen={showFacultyModal} onClose={() => setShowFacultyModal(false)} />
+      <AIChatBubble />
     </div>
   );
 }

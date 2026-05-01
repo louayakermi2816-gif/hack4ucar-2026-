@@ -61,15 +61,16 @@ class AcademicRecord(Base):
         CheckConstraint("dropout_rate    BETWEEN 0 AND 100", name="ck_academic_dropout"),
     )
 
-    id              = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    institution_id  = Column(UUID(as_uuid=True), ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False, index=True)
-    semester        = Column(String, nullable=False, index=True)
-    success_rate    = Column(Float)
-    attendance_rate = Column(Float)
-    repetition_rate = Column(Float)
-    dropout_rate    = Column(Float)
+    id                = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    institution_id    = Column(UUID(as_uuid=True), ForeignKey("institutions.id", ondelete="CASCADE"), nullable=False, index=True)
+    semester          = Column(String, nullable=False, index=True)
+    enrolled_students = Column(Integer, default=0)
+    success_rate      = Column(Float)
+    attendance_rate   = Column(Float)
+    repetition_rate   = Column(Float)
+    dropout_rate      = Column(Float)
 
-    institution     = relationship("Institution", back_populates="academic_records")
+    institution       = relationship("Institution", back_populates="academic_records")
 
 
 # ── 4. employment_records ─────────────────────────────────────────────────

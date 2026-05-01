@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from app.models.models import User, Institution
 from app.services.auth import hash_password
 
-DATABASE_URL = "postgresql://hack4ucar:secret@db:5432/hack4ucar_db"
+DATABASE_URL = "postgresql://hack4ucar:secret@localhost:5432/hack4ucar_db"
 engine = create_engine(DATABASE_URL)
 db = sessionmaker(bind=engine)()
 

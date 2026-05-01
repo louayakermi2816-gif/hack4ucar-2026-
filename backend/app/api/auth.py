@@ -130,3 +130,32 @@ def me(user: User = Depends(get_current_user)):
         full_name=user.full_name, role=user.role,
         institution_id=str(user.institution_id) if user.institution_id else None,
     )
+
+class InstitutionUpdate(BaseModel):
+    institution_id: str
+
+@router.put("/me/institution", response_model=UserResponse)
+def update_institution(
+    body: InstitutionUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """Allow Deans to switch their current active faculty session preference."""
+    if user.role != "dean":
+        raise HTTPException(status_code=403, detail="Only deans can switch institutions")
+    
+    # Verify institution exists
+    from app.models.models import Institution
+    inst = db.query(Institution).filter(Institution.id == body.institution_id).first()
+    if not inst:
+        raise HTTPException(status_code=404, detail="Institution not found")
+        
+    user.institution_id = inst.id
+    db.commit()
+    db.refresh(user)
+    
+    return UserResponse(
+        id=str(user.id), email=user.email,
+        full_name=user.full_name, role=user.role,
+        institution_id=str(user.institution_id) if user.institution_id else None,
+    )
