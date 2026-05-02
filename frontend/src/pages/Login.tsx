@@ -146,13 +146,21 @@ export default function LoginPage() {
         <p style={{ fontSize: 17, color: heroSubColor, fontWeight: 500, maxWidth: 450, marginBottom: 48, lineHeight: 1.7 }}>
           {t("login.hero_subtitle") || "La plateforme d'intelligence décisionnelle conçue spécifiquement pour l'Université de Carthage."}
         </p>
-        <div style={{ width: '100%', maxWidth: 450, height: 260, background: heroIllustrationBg, borderRadius: 32, border: `1px solid ${separatorColor}`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
+        <div style={{ width: '100%', maxWidth: 450, padding: '40px 0', background: heroIllustrationBg, borderRadius: 32, border: `1px solid ${separatorColor}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 24, overflow: 'hidden', position: 'relative' }}>
           <div style={{ position: 'absolute', top: 40, left: 40, width: 128, height: 128, background: heroBlobA, borderRadius: '50%', filter: 'blur(48px)' }} />
           <div style={{ position: 'absolute', bottom: 40, right: 40, width: 128, height: 128, background: heroBlobB, borderRadius: '50%', filter: 'blur(48px)' }} />
-          <div style={{ position: 'relative', zIndex: 10, display: 'flex', gap: 16, alignItems: 'flex-end' }}>
-            {[28, 40, 20, 32].map((h, i) => (
-              <div key={i} style={{ width: 48, height: h * 4, background: heroBarColors[i], borderRadius: '12px 12px 0 0', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} />
-            ))}
+          
+          <div style={{ position: 'relative', zIndex: 10, padding: 16, borderRadius: 24, background: '#ffffff', boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.4)' : '0 8px 32px rgba(0,0,0,0.1)', border: `2px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(59,130,246,0.2)'}` }}>
+            <QRCodeSVG value={window.location.origin} size={160} fgColor="#000000" bgColor="#ffffff" level="H" includeMargin={false} />
+          </div>
+          
+          <div style={{ position: 'relative', zIndex: 10, textAlign: 'center' }}>
+            <p style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: heroTextColor, marginBottom: 8 }}>
+              {t("login.scan_title", "Accès Mobile")}
+            </p>
+            <p style={{ fontSize: 13, color: heroSubColor, fontWeight: 500, maxWidth: 280, margin: '0 auto' }}>
+              {t("login.scan_subtitle", "Scannez avec votre téléphone pour accéder instantanément à UcarOS")}
+            </p>
           </div>
         </div>
       </div>
@@ -268,31 +276,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* QR Code for mobile access */}
-          <div style={{ borderTop: `1px solid ${separatorColor}`, marginTop: 28, paddingTop: 28, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-            <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: demoLabelColor, textAlign: 'center' }}>
-              Scan to open on mobile
-            </p>
-            <div style={{
-              padding: 16,
-              borderRadius: 16,
-              background: '#ffffff',
-              boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.08)',
-              border: `2px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(59,130,246,0.2)'}`,
-            }}>
-              <QRCodeSVG
-                value={window.location.origin}
-                size={160}
-                fgColor="#000000"
-                bgColor="#ffffff"
-                level="H"
-                includeMargin={false}
-              />
-            </div>
-            <p style={{ fontSize: 11, color: subtitleColor, fontWeight: 500, textAlign: 'center', maxWidth: 240 }}>
-              Point your phone camera at the code to access UcarOS
-            </p>
-          </div>
+
         </div>
       </div>
 

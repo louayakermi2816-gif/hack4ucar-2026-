@@ -14,7 +14,9 @@
     "email_placeholder": "you@university.tn",
     "help": "Get help",
     "forgot_password": "Forgot password or email?",
-    "learn_more": "Learn more about logging in"
+    "learn_more": "Learn more about logging in",
+    "scan_title": "Mobile Access",
+    "scan_subtitle": "Scan with your phone to instantly access UcarOS"
   },
   "register": {
     "title": "Create Account",

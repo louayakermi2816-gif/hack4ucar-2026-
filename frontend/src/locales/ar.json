@@ -14,7 +14,9 @@
     "email_placeholder": "you@university.tn",
     "help": "الحصول على المساعدة",
     "forgot_password": "نسيت كلمة المرور أو البريد الإلكتروني؟",
-    "learn_more": "معرفة المزيد عن تسجيل الدخول"
+    "learn_more": "معرفة المزيد عن تسجيل الدخول",
+    "scan_title": "وصول عبر الهاتف",
+    "scan_subtitle": "امسح بهاتفك للوصول فوراً إلى منصة UcarOS"
   },
   "register": {
     "title": "إنشاء حساب",
