@@ -11,12 +11,15 @@ const resources = {
   ar: { translation: arTranslation }
 };
 
+// Persist language choice in localStorage
+const savedLang = typeof window !== 'undefined' ? localStorage.getItem('ucaros_lang') : null;
+
 i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'fr', // default language
-    fallbackLng: 'fr',
+    lng: savedLang || 'en',
+    fallbackLng: 'en',
     interpolation: {
       escapeValue: false // React already escapes values
     }
@@ -26,6 +29,7 @@ i18n
 i18n.on('languageChanged', (lng) => {
   document.documentElement.dir = lng === 'ar' ? 'rtl' : 'ltr';
   document.documentElement.lang = lng;
+  localStorage.setItem('ucaros_lang', lng);
 });
 
 export default i18n;

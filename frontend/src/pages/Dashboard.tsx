@@ -70,7 +70,7 @@ export default function Dashboard() {
       link.remove();
     } catch (e) {
       console.error(e);
-      alert("Erreur lors du téléchargement du rapport");
+      alert(t("dashboard.download_error"));
     } finally {
       setIsDownloading(false);
     }
@@ -194,21 +194,55 @@ export default function Dashboard() {
         <button 
           onClick={handleDownloadReport}
           disabled={isDownloading}
-          className="flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1"
+          className="flex items-center gap-0 transition-all duration-300 hover:-translate-y-0.5 group"
           style={{ 
-            background: isDark ? 'linear-gradient(135deg, #D4AF37 0%, #b8962e 100%)' : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+            background: 'transparent',
             border: 'none',
-            color: isDark ? '#0a0d15' : '#ffffff',
-            fontWeight: 800,
-            fontSize: 13,
-            letterSpacing: '0.08em',
-            boxShadow: isDark ? '0 8px 20px rgba(212,175,55,0.25)' : '0 8px 20px rgba(59,130,246,0.3)',
+            padding: 0,
+            cursor: isDownloading ? 'wait' : 'pointer',
             opacity: isDownloading ? 0.7 : 1,
-            cursor: isDownloading ? 'wait' : 'pointer'
           }}
         >
-          {isDownloading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} strokeWidth={2.5} />}
-          TÉLÉCHARGER LE RAPPORT 🚀
+          {/* Icon section */}
+          <div style={{
+            width: 38,
+            height: 38,
+            borderRadius: '10px 0 0 10px',
+            background: isDark 
+              ? 'linear-gradient(135deg, #D4AF37, #b8962e)' 
+              : 'linear-gradient(135deg, #3b82f6, #2563eb)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: isDark ? '0 4px 12px rgba(212,175,55,0.2)' : '0 4px 12px rgba(59,130,246,0.2)',
+            transition: 'all 0.3s ease',
+          }}>
+            {isDownloading 
+              ? <Loader2 size={16} className="animate-spin" style={{ color: isDark ? '#0a0d15' : '#fff' }} /> 
+              : <Download size={16} strokeWidth={2.5} style={{ color: isDark ? '#0a0d15' : '#fff' }} />
+            }
+          </div>
+          {/* Text section */}
+          <div style={{
+            height: 38,
+            padding: '0 16px',
+            borderRadius: '0 10px 10px 0',
+            background: isDark ? 'rgba(212,175,55,0.08)' : 'rgba(59,130,246,0.06)',
+            border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : 'rgba(59,130,246,0.15)'}`,
+            borderLeft: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            transition: 'all 0.3s ease',
+          }}>
+            <span style={{
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              color: accent,
+            }}>
+              {t("dashboard.download_report")}
+            </span>
+          </div>
         </button>
       </div>
 

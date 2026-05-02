@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { QRCodeSVG } from "qrcode.react";
 import type { FormEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../auth";
@@ -102,17 +103,17 @@ export default function LoginPage() {
 
   const demoColors = isDark
     ? [
-        { bg: 'rgba(168,85,247,0.08)', text: '#a78bfa', hoverBg: 'rgba(168,85,247,0.15)' },
-        { bg: 'rgba(59,130,246,0.08)', text: '#60a5fa', hoverBg: 'rgba(59,130,246,0.15)' },
-        { bg: 'rgba(52,211,153,0.08)', text: '#34d399', hoverBg: 'rgba(52,211,153,0.15)' },
-        { bg: 'rgba(251,146,60,0.08)', text: '#fb923c', hoverBg: 'rgba(251,146,60,0.15)' },
-      ]
+      { bg: 'rgba(168,85,247,0.08)', text: '#a78bfa', hoverBg: 'rgba(168,85,247,0.15)' },
+      { bg: 'rgba(59,130,246,0.08)', text: '#60a5fa', hoverBg: 'rgba(59,130,246,0.15)' },
+      { bg: 'rgba(52,211,153,0.08)', text: '#34d399', hoverBg: 'rgba(52,211,153,0.15)' },
+      { bg: 'rgba(251,146,60,0.08)', text: '#fb923c', hoverBg: 'rgba(251,146,60,0.15)' },
+    ]
     : [
-        { bg: '#faf5ff', text: '#7c3aed', hoverBg: '#f3e8ff' },
-        { bg: '#eff6ff', text: '#3b82f6', hoverBg: '#dbeafe' },
-        { bg: '#ecfdf5', text: '#059669', hoverBg: '#d1fae5' },
-        { bg: '#fff7ed', text: '#ea580c', hoverBg: '#ffedd5' },
-      ];
+      { bg: '#faf5ff', text: '#7c3aed', hoverBg: '#f3e8ff' },
+      { bg: '#eff6ff', text: '#3b82f6', hoverBg: '#dbeafe' },
+      { bg: '#ecfdf5', text: '#059669', hoverBg: '#d1fae5' },
+      { bg: '#fff7ed', text: '#ea580c', hoverBg: '#ffedd5' },
+    ];
 
   const focusRing = isDark ? 'rgba(212,175,55,0.2)' : 'rgba(59,130,246,0.2)';
   const focusBorder = accent;
@@ -265,6 +266,32 @@ export default function LoginPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* QR Code for mobile access */}
+          <div style={{ borderTop: `1px solid ${separatorColor}`, marginTop: 28, paddingTop: 28, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: demoLabelColor, textAlign: 'center' }}>
+              Scan to open on mobile
+            </p>
+            <div style={{
+              padding: 16,
+              borderRadius: 16,
+              background: '#ffffff',
+              boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.08)',
+              border: `2px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(59,130,246,0.2)'}`,
+            }}>
+              <QRCodeSVG
+                value={window.location.origin}
+                size={160}
+                fgColor="#000000"
+                bgColor="#ffffff"
+                level="H"
+                includeMargin={false}
+              />
+            </div>
+            <p style={{ fontSize: 11, color: subtitleColor, fontWeight: 500, textAlign: 'center', maxWidth: 240 }}>
+              Point your phone camera at the code to access UcarOS
+            </p>
           </div>
         </div>
       </div>
