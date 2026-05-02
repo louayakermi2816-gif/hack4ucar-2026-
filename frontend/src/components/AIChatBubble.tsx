@@ -7,6 +7,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X, Send, Bot } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import api from "../api";
 
 interface Message {
@@ -21,19 +22,25 @@ function timeNow() {
 }
 
 export default function AIChatBubble() {
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 0,
-      role: "assistant",
-      content: "Bonjour ! Je suis l'assistant IA UcarOS. Posez-moi une question sur les indicateurs de performance. 🎓",
-      time: timeNow(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Initialize with translated welcome message
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([{
+        id: 0,
+        role: "assistant",
+        content: t("chat.welcome"),
+        time: timeNow(),
+      }]);
+    }
+  }, [t, messages.length]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,7 +60,10 @@ export default function AIChatBubble() {
     setLoading(true);
 
     try {
-      const res = await api.post("/api/chat", { message: text });
+      const res = await api.post("/api/chat", { 
+        message: text,
+        language: i18n.language
+      });
       setMessages((prev) => [
         ...prev,
         { id: Date.now() + 1, role: "assistant", content: res.data.reply, time: timeNow() },
@@ -61,7 +71,7 @@ export default function AIChatBubble() {
     } catch {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now() + 1, role: "assistant", content: "Désolé, une erreur s'est produite. Réessayez.", time: timeNow() },
+        { id: Date.now() + 1, role: "assistant", content: t("chat.error"), time: timeNow() },
       ]);
     } finally {
       setLoading(false);
@@ -116,7 +126,7 @@ export default function AIChatBubble() {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: '#f1f5f9', letterSpacing: '-0.01em' }}>
-                  Assistant IA
+                  {t("chat.title")}
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
                   <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px rgba(34,197,94,0.5)' }} />
@@ -232,7 +242,7 @@ export default function AIChatBubble() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Posez votre question..."
+                placeholder={t("chat.placeholder")}
                 disabled={loading}
                 style={{
                   flex: 1,

@@ -1,10 +1,15 @@
+import React, { useState } from "react";
+import DashboardMap from "../components/DashboardMap";
+import type { MapInstitution } from "../components/DashboardMap";
+import SmartInsights from "../components/SmartInsights";
 import { useQuery } from "@tanstack/react-query";
 import api from "../api";
 import { useTheme } from "../ThemeProvider";
+import { useTranslation } from "react-i18next";
 import {
   Users, GraduationCap, TrendingUp, BookOpen, Layers,
   ArrowUpRight, ArrowDownRight, ArrowRight, Award, DollarSign,
-  BarChart3, PieChart as PieChartIcon,
+  BarChart3, PieChart as PieChartIcon, Download, Loader2
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -13,25 +18,70 @@ import {
 
 export default function Dashboard() {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const isDark = theme === "dark";
   const accent = isDark ? '#D4AF37' : '#3b82f6';
   const accentLight = isDark ? 'rgba(212,175,55,0.35)' : 'rgba(59,130,246,0.35)';
 
+  const [selectedMapIds, setSelectedMapIds] = useState<string[]>([]);
+
+  const queryParams = selectedMapIds.length > 0 ? `?inst_ids=${selectedMapIds.join(",")}` : "";
+  const rankingParams = selectedMapIds.length > 0 ? `&inst_ids=${selectedMapIds.join(",")}` : "";
+
   const { data: overview, isLoading } = useQuery({
-    queryKey: ["overview"],
-    queryFn: () => api.get("/api/dashboard/overview").then((r) => r.data),
+    queryKey: ["overview", selectedMapIds],
+    queryFn: () => api.get(`/api/dashboard/overview${queryParams}`).then((r) => r.data),
   });
   const { data: ranking } = useQuery({
-    queryKey: ["ranking"],
-    queryFn: () => api.get("/api/dashboard/ranking?metric=success_rate&limit=6").then((r) => r.data),
+    queryKey: ["ranking", selectedMapIds],
+    queryFn: () => api.get(`/api/dashboard/ranking?metric=success_rate&limit=6${rankingParams}`).then((r) => r.data),
   });
+
+
+  
+  const { data: institutions = [] } = useQuery<MapInstitution[]>({
+    queryKey: ["map_institutions"],
+    queryFn: async () => {
+      const res = await api.get("/api/institutions");
+      return res.data;
+    }
+  });
+
+  const handleToggleSelection = (id: string) => {
+    setSelectedMapIds(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownloadReport = async () => {
+    setIsDownloading(true);
+    try {
+      const res = await api.get(`/api/reports/download${queryParams}`, {
+        responseType: 'blob' // Important for PDF
+      });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'UcarOS_Executive_Report.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (e) {
+      console.error(e);
+      alert("Erreur lors du téléchargement du rapport");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center" style={{ height: '60vh' }}>
         <div className="flex flex-col items-center gap-4">
           <div style={{ width: 48, height: 48, border: `3px solid var(--uc-border)`, borderTopColor: accent, borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-          <span style={{ color: 'var(--uc-text-muted)', fontSize: 14, fontWeight: 500 }}>Loading Dashboard...</span>
+          <span style={{ color: 'var(--uc-text-muted)', fontSize: 14, fontWeight: 500 }}>{t("dashboard.loading")}</span>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -41,12 +91,12 @@ export default function Dashboard() {
   const fmt = (n: number) => n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n / 1e3).toFixed(1)}K` : `${n}`;
 
   const kpiCards = [
-    { label: "ENROLLMENT", value: fmt(overview?.academic?.total_enrolled_students || 42850), sub: "vs Last Year", trend: "+3.2%", trendDir: "up" as const, icon: <GraduationCap size={20} /> },
-    { label: "RESEARCH GRANTS", value: `${fmt(overview?.finance?.total_budget_allocated || 314500000)} TND`, sub: "YTD", trend: "↑ 8.1%", trendDir: "up" as const, icon: <BookOpen size={20} /> },
-    { label: "FACULTY SIZE", value: fmt(overview?.research?.active_projects ? overview.research.active_projects * 260 : 3120), sub: "vs Last Year", trend: "↓ 0.5%", trendDir: "down" as const, icon: <Users size={20} /> },
-    { label: "SUCCESS RATE", value: `${overview?.academic?.avg_success_rate || 88.6}%`, sub: "YoY", trend: "↑ 1.9%", trendDir: "up" as const, icon: <Award size={20} /> },
-    { label: "BUDGET EXEC", value: `${overview?.finance?.utilization_rate || 94.1}%`, sub: "YoY", trend: "→ 0.0%", trendDir: "neutral" as const, icon: <DollarSign size={20} /> },
-    { label: "PUBLICATIONS", value: `${overview?.research?.total_publications || 105}`, sub: "vs Last Year", trend: "↑ 11.4%", trendDir: "up" as const, icon: <Layers size={20} /> },
+    { label: t("dashboard.kpi.faculty_size"), value: fmt(overview?.research?.active_projects ? overview.research.active_projects * 260 : 3120), sub: t("dashboard.kpi.vs_last_year"), trend: "↓ 0.5%", trendDir: "down" as const, icon: <Users size={20} /> },
+    { label: t("dashboard.kpi.research_grants"), value: `${fmt(overview?.finance?.total_budget_allocated || 314500000)} TND`, sub: t("dashboard.kpi.ytd"), trend: "↑ 8.1%", trendDir: "up" as const, icon: <BookOpen size={20} /> },
+    { label: t("dashboard.kpi.enrollment"), value: fmt(overview?.academic?.total_enrolled_students || 42850), sub: t("dashboard.kpi.vs_last_year"), trend: "+3.2%", trendDir: "up" as const, icon: <GraduationCap size={20} /> },
+    { label: t("dashboard.kpi.publications"), value: `${overview?.research?.total_publications || 105}`, sub: t("dashboard.kpi.vs_last_year"), trend: "↑ 11.4%", trendDir: "up" as const, icon: <Layers size={20} /> },
+    { label: t("dashboard.kpi.budget_exec"), value: `${overview?.finance?.utilization_rate || 94.1}%`, sub: t("dashboard.kpi.ytd"), trend: "→ 0.0%", trendDir: "neutral" as const, icon: <DollarSign size={20} /> },
+    { label: t("dashboard.kpi.success_rate"), value: `${overview?.academic?.avg_success_rate || 88.6}%`, sub: t("dashboard.kpi.ytd"), trend: "↑ 1.9%", trendDir: "up" as const, icon: <Award size={20} /> },
   ];
 
   const enrollmentData = [
@@ -60,19 +110,19 @@ export default function Dashboard() {
 
   const fundingData = isDark
     ? [
-        { name: "Federal", value: 45, color: "#D4AF37" },
-        { name: "State", value: 20, color: "#f59e0b" },
-        { name: "Private Foundation", value: 18, color: "#92400e" },
-        { name: "Corporate", value: 12, color: "#fbbf24" },
-        { name: "International", value: 5, color: "#b8962e" },
-      ]
+      { name: "Federal", value: 45, color: "#D4AF37" },
+      { name: "State", value: 20, color: "#f59e0b" },
+      { name: "Private Foundation", value: 18, color: "#92400e" },
+      { name: "Corporate", value: 12, color: "#fbbf24" },
+      { name: "International", value: 5, color: "#b8962e" },
+    ]
     : [
-        { name: "Federal", value: 45, color: "#3b82f6" },
-        { name: "State", value: 20, color: "#6366f1" },
-        { name: "Private Foundation", value: 18, color: "#8b5cf6" },
-        { name: "Corporate", value: 12, color: "#60a5fa" },
-        { name: "International", value: 5, color: "#a78bfa" },
-      ];
+      { name: "Federal", value: 45, color: "#3b82f6" },
+      { name: "State", value: 20, color: "#6366f1" },
+      { name: "Private Foundation", value: 18, color: "#8b5cf6" },
+      { name: "Corporate", value: 12, color: "#60a5fa" },
+      { name: "International", value: 5, color: "#a78bfa" },
+    ];
 
   const performanceData = [
     { month: "Sep", success: 82, retention: 90 },
@@ -134,10 +184,41 @@ export default function Dashboard() {
   return (
     <div className="w-full mx-auto flex flex-col gap-8" style={{ maxWidth: 1540, fontFamily: "'Inter','DM Sans',sans-serif" }}>
 
-      {/* Title */}
-      <div className="animate-fade-in-up">
-        <h1 className="uc-page-title" style={{ marginBottom: 4 }}>Chancellor's Strategic Dashboard</h1>
-        <p style={{ color: 'var(--uc-text-dim)', fontSize: 13, fontWeight: 500, letterSpacing: '0.02em' }}>Academic Year 2023-24 • Real-time analytics overview</p>
+      {/* Title & Actions */}
+      <div className="animate-fade-in-up flex items-center justify-between">
+        <div>
+          <h1 className="uc-page-title" style={{ marginBottom: 4 }}>{t("dashboard.page_title")}</h1>
+          <p style={{ color: 'var(--uc-text-dim)', fontSize: 13, fontWeight: 500, letterSpacing: '0.02em' }}>{t("dashboard.page_subtitle")}</p>
+        </div>
+        
+        <button 
+          onClick={handleDownloadReport}
+          disabled={isDownloading}
+          className="flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 hover:-translate-y-1"
+          style={{ 
+            background: isDark ? 'linear-gradient(135deg, #D4AF37 0%, #b8962e 100%)' : 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+            border: 'none',
+            color: isDark ? '#0a0d15' : '#ffffff',
+            fontWeight: 800,
+            fontSize: 13,
+            letterSpacing: '0.08em',
+            boxShadow: isDark ? '0 8px 20px rgba(212,175,55,0.25)' : '0 8px 20px rgba(59,130,246,0.3)',
+            opacity: isDownloading ? 0.7 : 1,
+            cursor: isDownloading ? 'wait' : 'pointer'
+          }}
+        >
+          {isDownloading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} strokeWidth={2.5} />}
+          TÉLÉCHARGER LE RAPPORT 🚀
+        </button>
+      </div>
+
+      {/* Interactive Map */}
+      <div className="animate-fade-in-up stagger-1" style={{ marginBottom: 16 }}>
+        <DashboardMap 
+          institutions={institutions} 
+          selectedIds={selectedMapIds} 
+          onToggleSelection={handleToggleSelection} 
+        />
       </div>
 
       {/* KPI Row 1 */}
@@ -150,6 +231,9 @@ export default function Dashboard() {
         {kpiCards.slice(3, 6).map((kpi, idx) => <KpiCard key={idx} kpi={kpi} idx={idx + 3} />)}
       </div>
 
+      {/* AI Smart Insights */}
+      <SmartInsights selectedMapIds={selectedMapIds} />
+
       {/* Charts Row */}
       <div className="grid gap-5" style={{ gridTemplateColumns: '1fr 1fr' }}>
         {/* Bar Chart */}
@@ -157,11 +241,11 @@ export default function Dashboard() {
           <div className="flex items-center justify-between" style={{ marginBottom: 24 }}>
             <div className="flex items-center gap-3">
               <div className="uc-icon-badge uc-icon-badge-sm"><BarChart3 size={16} /></div>
-              <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>Total Enrollment Trends (2018-2023)</h3>
+              <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>{t("dashboard.charts.enrollment_trends")}</h3>
             </div>
             <div className="flex items-center gap-4" style={{ fontSize: 11, color: 'var(--uc-text-muted)' }}>
-              <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: 2, background: accent, display: 'inline-block' }} />Undergraduate</span>
-              <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: 2, background: accentLight, display: 'inline-block' }} />Graduate</span>
+              <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: 2, background: accent, display: 'inline-block' }} />{t("dashboard.charts.undergraduate")}</span>
+              <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: 2, background: accentLight, display: 'inline-block' }} />{t("dashboard.charts.graduate")}</span>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={280}>
@@ -170,8 +254,8 @@ export default function Dashboard() {
               <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: axisTick, fontSize: 11 }} />
               <YAxis axisLine={false} tickLine={false} tick={{ fill: axisTick, fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}K`} />
               <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="undergraduate" name="Undergraduate" fill={accent} radius={[4, 4, 0, 0]} maxBarSize={40} />
-              <Bar dataKey="graduate" name="Graduate" fill={accentLight} radius={[4, 4, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="undergraduate" name={t("dashboard.charts.undergraduate")} fill={accent} radius={[4, 4, 0, 0]} maxBarSize={40} />
+              <Bar dataKey="graduate" name={t("dashboard.charts.graduate")} fill={accentLight} radius={[4, 4, 0, 0]} maxBarSize={40} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -180,7 +264,7 @@ export default function Dashboard() {
         <div className="uc-chart-card animate-fade-in-up stagger-6">
           <div className="flex items-center gap-3" style={{ marginBottom: 24 }}>
             <div className="uc-icon-badge uc-icon-badge-sm"><PieChartIcon size={16} /></div>
-            <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>Research Funding by Sector (FY 2024)</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>{t("dashboard.charts.research_funding")}</h3>
           </div>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
@@ -190,7 +274,7 @@ export default function Dashboard() {
               <Tooltip content={<CustomTooltip />} />
               <Legend verticalAlign="bottom" iconType="square" iconSize={8} wrapperStyle={{ fontSize: 11, paddingTop: 12 }}
                 formatter={(value: string) => <span style={{ color: 'var(--uc-legend-text)', fontSize: 11, marginLeft: 4 }}>{value}</span>} />
-              <text x="50%" y="46%" textAnchor="middle" dominantBaseline="central" style={{ fontSize: 12, fill: 'var(--uc-text-muted)', fontWeight: 500 }}>Total</text>
+              <text x="50%" y="46%" textAnchor="middle" dominantBaseline="central" style={{ fontSize: 12, fill: 'var(--uc-text-muted)', fontWeight: 500 }}>{t("dashboard.charts.total")}</text>
               <text x="50%" y="55%" textAnchor="middle" dominantBaseline="central" style={{ fontSize: 20, fill: accent, fontWeight: 800 }}>{fmt(overview?.finance?.total_budget_allocated || 314500000)}</text>
             </PieChart>
           </ResponsiveContainer>
@@ -202,11 +286,11 @@ export default function Dashboard() {
         <div className="flex items-center justify-between" style={{ marginBottom: 24 }}>
           <div className="flex items-center gap-3">
             <div className="uc-icon-badge uc-icon-badge-sm"><TrendingUp size={16} /></div>
-            <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>Academic Performance Trends</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>{t("dashboard.charts.performance_trends")}</h3>
           </div>
           <div className="flex items-center gap-4" style={{ fontSize: 11, color: 'var(--uc-text-muted)' }}>
-            <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: '50%', background: accent, display: 'inline-block' }} />Success Rate</span>
-            <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', display: 'inline-block' }} />Retention Rate</span>
+            <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: '50%', background: accent, display: 'inline-block' }} />{t("dashboard.charts.success_rate_label")}</span>
+            <span className="flex items-center gap-1.5"><span style={{ width: 8, height: 8, borderRadius: '50%', background: '#34d399', display: 'inline-block' }} />{t("dashboard.charts.retention_rate")}</span>
           </div>
         </div>
         <ResponsiveContainer width="100%" height={260}>
@@ -225,8 +309,8 @@ export default function Dashboard() {
             <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: axisTick, fontSize: 11 }} />
             <YAxis domain={[75, 100]} axisLine={false} tickLine={false} tick={{ fill: axisTick, fontSize: 11 }} tickFormatter={(v) => `${v}%`} />
             <Tooltip content={<CustomTooltip />} />
-            <Area type="monotone" dataKey="success" name="Success Rate" stroke={accent} strokeWidth={2.5} fill="url(#goldGradient)" dot={{ fill: accent, r: 3, strokeWidth: 0 }} activeDot={{ r: 5, fill: accent, stroke: activeDotStroke, strokeWidth: 2 }} />
-            <Area type="monotone" dataKey="retention" name="Retention Rate" stroke="#34d399" strokeWidth={2} fill="url(#greenGradient)" dot={{ fill: '#34d399', r: 3, strokeWidth: 0 }} activeDot={{ r: 5, fill: '#34d399', stroke: activeDotStroke, strokeWidth: 2 }} />
+            <Area type="monotone" dataKey="success" name={t("dashboard.charts.success_rate_label")} stroke={accent} strokeWidth={2.5} fill="url(#goldGradient)" dot={{ fill: accent, r: 3, strokeWidth: 0 }} activeDot={{ r: 5, fill: accent, stroke: activeDotStroke, strokeWidth: 2 }} />
+            <Area type="monotone" dataKey="retention" name={t("dashboard.charts.retention_rate")} stroke="#34d399" strokeWidth={2} fill="url(#greenGradient)" dot={{ fill: '#34d399', r: 3, strokeWidth: 0 }} activeDot={{ r: 5, fill: '#34d399', stroke: activeDotStroke, strokeWidth: 2 }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -236,17 +320,17 @@ export default function Dashboard() {
         <div className="uc-chart-card animate-fade-in-up">
           <div className="flex items-center gap-3" style={{ marginBottom: 20 }}>
             <div className="uc-icon-badge uc-icon-badge-sm"><Award size={16} /></div>
-            <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>Faculty Performance Rankings</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--uc-text-secondary)' }}>{t("dashboard.charts.faculty_rankings")}</h3>
           </div>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 6px' }}>
               <thead>
                 <tr>
                   <th style={thStyle}>#</th>
-                  <th style={{ ...thStyle, textAlign: 'left' }}>Institution</th>
-                  <th style={thStyle}>Success Rate</th>
-                  <th style={thStyle}>Students</th>
-                  <th style={thStyle}>Trend</th>
+                  <th style={{ ...thStyle, textAlign: 'left' }}>{t("dashboard.charts.institution")}</th>
+                  <th style={thStyle}>{t("dashboard.charts.success_rate_label")}</th>
+                  <th style={thStyle}>{t("dashboard.charts.students")}</th>
+                  <th style={thStyle}>{t("dashboard.charts.trend")}</th>
                 </tr>
               </thead>
               <tbody>

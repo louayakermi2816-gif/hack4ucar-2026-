@@ -1,13 +1,20 @@
 {
   "login": {
-    "title": "Login",
-    "email": "Email",
+    "title": "Welcome",
+    "email": "Email address",
     "password": "Password",
-    "button": "Sign In",
-    "loading": "Signing in...",
-    "demo_accounts": "Demo Accounts:",
-    "no_account": "Don't have an account?",
-    "signup": "Sign Up"
+    "button": "Log in",
+    "loading": "Logging in...",
+    "demo_accounts": "Quick demo access",
+    "no_account": "Don't have an account yet?",
+    "signup": "Sign up here",
+    "hero_title": "Manage your university with ease.",
+    "hero_subtitle": "The decision-making intelligence platform designed specifically for the University of Carthage.",
+    "subtitle": "Log in to access your decision intelligence workspace.",
+    "email_placeholder": "you@university.tn",
+    "help": "Get help",
+    "forgot_password": "Forgot password or email?",
+    "learn_more": "Learn more about logging in"
   },
   "register": {
     "title": "Create Account",
@@ -19,7 +26,8 @@
       "student": "Student",
       "researcher": "Researcher",
       "dean": "Dean",
-      "admin": "Admin"
+      "admin": "Admin",
+      "president": "President"
     },
     "secret_code": "UCAR Authorization Code",
     "button": "Sign Up",
@@ -39,7 +47,19 @@
     "analytics": "Analytics",
     "upload": "Import Data",
     "settings": "Settings",
-    "breadcrumb": "University Chancellor"
+    "alerts": "Alerts"
+  },
+  "header": {
+    "breadcrumb": "University Chancellor",
+    "search": "Search pages...",
+    "no_results": "No results found",
+    "notifications": "Notifications",
+    "mark_read": "Mark all read",
+    "view_all": "View all notifications",
+    "profile": "My Profile",
+    "settings": "Settings",
+    "logout": "Sign Out",
+    "select_institution": "Select Institution"
   },
   "settings": {
     "title": "Settings",
@@ -50,24 +70,24 @@
     "theme_desc": "Choose between dark mode and light mode",
     "dark": "Dark",
     "light": "Light",
-    "language": "Language",
-    "language_label": "Interface Language",
-    "language_desc": "Change the platform display language",
     "profile": "Profile",
     "full_name": "Full Name",
     "email": "Email",
-    "role_label": "Role",
+    "role": "Role",
     "edit": "Edit",
     "save": "Save",
+    "language": "Language",
+    "lang_label": "Interface Language",
+    "lang_desc": "Choose the application language",
     "notifications": "Notifications",
     "kpi_alerts": "KPI Alerts",
-    "kpi_alerts_desc": "Receive alerts when indicators exceed thresholds",
+    "kpi_alerts_desc": "Get notified when indicators exceed thresholds",
     "weekly_reports": "Weekly Reports",
     "weekly_reports_desc": "Automatic summary every Monday morning",
     "system_updates": "System Updates",
-    "system_updates_desc": "Maintenance notifications and new features",
+    "system_updates_desc": "Maintenance and new feature notifications",
     "security": "Security",
-    "2fa": "Two-Factor Auth",
+    "2fa": "Two-Factor Authentication",
     "2fa_desc": "Add an extra layer of security",
     "sessions": "Active Sessions",
     "sessions_desc": "2 active sessions on this device",
@@ -78,39 +98,20 @@
   },
   "alerts": {
     "title": "Alerts",
-    "subtitle": "System-detected anomalies",
-    "all_severities": "All Severities",
-    "all_domains": "All Domains",
+    "subtitle": "Anomalies detected by the system",
+    "all_severities": "All severities",
     "high": "High",
     "medium": "Medium",
     "low": "Low",
-    "none": "No alerts found"
-  },
-  "notifications": {
-    "title": "Notifications",
-    "mark_read": "Mark all read",
-    "view_all": "View all notifications",
-    "items": {
-      "dropout": "High dropout rate detected at FST",
-      "budget": "Q2 Budget executed at 92%",
-      "report": "New weekly report available",
-      "publications": "3 new publications added"
-    }
-  },
-  "profile_menu": {
-    "my_profile": "My Profile",
-    "settings": "Settings",
-    "logout": "Sign Out"
-  },
-  "search": {
-    "placeholder": "Search pages..."
+    "all_domains": "All domains",
+    "no_alerts": "No alerts found"
   },
   "upload": {
     "title": "Data Import",
     "subtitle": "CSV, Excel or PDF",
     "institution": "Institution",
-    "select_institution": "Select an institution...",
-    "drop_zone": "Drag a file here or click to browse",
+    "select_inst": "Select an institution...",
+    "drop_text": "Drag a file here or click to browse",
     "file_types": "CSV, XLSX, XLS, PDF",
     "button": "Import File",
     "loading": "Importing...",
@@ -120,13 +121,6 @@
     "access_denied": "Access Denied",
     "admin_only": "Only administrators can import files"
   },
-  "faculty_modal": {
-    "title": "Select your institution",
-    "subtitle": "Choose the institution you want to manage for this session.",
-    "search": "Search for a faculty or institute...",
-    "none": "No institutions found.",
-    "close": "Close"
-  },
   "roles": {
     "admin": "Administrator",
     "president": "President",
@@ -134,25 +128,332 @@
     "researcher": "Researcher",
     "student": "Student"
   },
+  "faculty_modal": {
+    "title": "Select your institution",
+    "subtitle": "Choose the institution you want to manage for this session.",
+    "search": "Search for a faculty or institute...",
+    "none_found": "No institution found.",
+    "close": "Close"
+  },
+  "notifications_data": {
+    "n1": "High dropout rate detected at FST",
+    "n2": "Q2 budget executed at 92%",
+    "n3": "New weekly report available",
+    "n4": "3 new publications added"
+  },
+  "chat": {
+    "title": "UcarOS AI Assistant",
+    "welcome": "Hello! I'm the UcarOS AI assistant. Ask me anything about performance indicators. 🎓",
+    "placeholder": "Ask a question...",
+    "error": "Sorry, an error occurred. Please try again."
+  },
+  "facilities": {
+    "title": "Facilities & Equipment",
+    "subtitle": "Space management and hardware resources • 2023-24",
+    "kpis": {
+      "occupancy": "Occupancy Rate",
+      "works": "Ongoing Works",
+      "connected": "Connected Devices",
+      "energy": "Energy Consumption"
+    },
+    "types": {
+      "amphi": "Amphitheaters",
+      "td": "Tutorial Rooms",
+      "lab": "Laboratories",
+      "lib": "Libraries",
+      "info": "Computer Labs"
+    },
+    "status": {
+      "operational": "Operational",
+      "maintenance": "Under Maintenance",
+      "out": "Out of Service"
+    },
+    "charts": {
+      "occupancy": "Occupancy Rate by Space Type",
+      "status": "Equipment Status"
+    }
+  },
+  "enrollment": {
+    "title": "Enrollment & Headcounts",
+    "subtitle": "Academic Year 2023-24 • Enrollment Overview",
+    "kpis": {
+      "total": "Total Enrolled",
+      "success": "Success Rate",
+      "dropout": "Dropout Rate",
+      "attendance": "Attendance Rate",
+      "vs_last_year": "vs Last Year"
+    },
+    "types": {
+      "faculties": "Faculties",
+      "schools": "Schools",
+      "institutes": "Institutes"
+    },
+    "charts": {
+      "evolution": "Enrollment Evolution (2019-2025)",
+      "enrolled": "Enrolled",
+      "distribution": "Distribution by Type",
+      "ranking": "Ranking by Success Rate",
+      "success_rate": "Success Rate (%)"
+    },
+    "loading": "Loading enrollments..."
+  },
+  "finance": {
+    "title": "Finance & Budget",
+    "subtitle": "Budget execution and financial monitoring • FY 2023-24",
+    "kpis": {
+      "total_budget": "Total Budget",
+      "consumed_budget": "Consumed Budget",
+      "execution_rate": "Execution Rate",
+      "cost_per_student": "Avg Cost/Student",
+      "yoy": "YoY"
+    },
+    "expenses": {
+      "salaries": "Salaries",
+      "infrastructure": "Infrastructure",
+      "research": "Research",
+      "equipment": "Equipment",
+      "others": "Others"
+    },
+    "charts": {
+      "budget_trend": "Allocated vs Consumed Budget (M TND)",
+      "allocated_legend": "Allocated (M)",
+      "consumed_legend": "Consumed (M)",
+      "expense_breakdown": "Expense Breakdown",
+      "budget_by_inst": "Budget by Institution",
+      "budget_tooltip": "Budget (TND)",
+      "cost_per_student": "Cost per Student",
+      "cost_tooltip": "Cost/Student (TND)"
+    },
+    "loading": "Loading finances..."
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "institutions": "Institutions",
     "alerts": "Alerts",
-    "upload": "Ingestion",
-    "logout": "Logout"
+    "upload": "Upload",
+    "logout": "Logout",
+    "facilities": "Facilities"
   },
   "dashboard": {
     "title": "UCAR Overview",
     "subtitle": "University of Carthage",
+    "page_title": "Chancellor's Strategic Dashboard",
+    "page_subtitle": "Academic Year 2023-24 • Real-time analytics overview",
+    "loading": "Loading Dashboard...",
+    "kpi": {
+      "enrollment": "ENROLLMENT",
+      "research_grants": "RESEARCH GRANTS",
+      "faculty_size": "FACULTY SIZE",
+      "success_rate": "SUCCESS RATE",
+      "budget_exec": "BUDGET EXEC",
+      "publications": "PUBLICATIONS",
+      "vs_last_year": "vs Last Year",
+      "ytd": "YTD"
+    },
+    "charts": {
+      "enrollment_trends": "Total Enrollment Trends (2018-2023)",
+      "undergraduate": "Undergraduate",
+      "graduate": "Graduate",
+      "research_funding": "Research Funding by Sector (FY 2024)",
+      "total": "Total",
+      "performance_trends": "Academic Performance Trends",
+      "success_rate_label": "Success Rate",
+      "retention_rate": "Retention Rate",
+      "faculty_rankings": "Faculty Performance Rankings",
+      "institution": "Institution",
+      "students": "Students",
+      "trend": "Trend",
+      "success_ranking": "Top 10 — Success Rate",
+      "type_distribution": "Distribution by Type"
+    },
     "cards": {
       "institutions": "Institutions",
       "success_rate": "Avg Success Rate",
       "budget": "Total Allocated Budget (TND)",
       "alerts": "Active Alerts"
+    }
+  },
+  "academic": {
+    "kpis": {
+      "success_rate": "Success Rate",
+      "dropout_rate": "Dropout Rate",
+      "attendance_rate": "Attendance Rate",
+      "repeat_rate": "Repeat Rate"
+    },
+    "title": "Academic Affairs",
+    "subtitle": "Academic performance • Year 2023-24",
+    "charts": {
+      "semester_trends": "Semester Trends",
+      "global_performance": "Global Performance",
+      "top_success": "Top Institutions — Success Rate",
+      "dropout_by_inst": "Dropout Rate by Institution"
+    },
+    "labels": {
+      "success": "Success %",
+      "attendance": "Attendance %",
+      "dropout": "Dropout %"
+    },
+    "loading": "Loading academic data..."
+  },
+  "faculty": {
+    "loading": "Loading...",
+    "kpis": {
+      "total_staff": "Total Staff",
+      "teaching_staff": "Teaching Staff",
+      "ratio": "Student/Prof Ratio",
+      "training_hours": "Training Hours"
+    },
+    "title": "Faculty & Staff",
+    "subtitle": "Human resources and professional development • 2023-24",
+    "charts": {
+      "workforce_evolution": "Workforce Evolution",
+      "distribution": "Staff Distribution"
+    },
+    "labels": {
+      "teaching": "Teaching Staff",
+      "admin": "Administrative",
+      "training": "Training Hours",
+      "technical": "Technical"
+    }
+  },
+  "research": {
+    "loading": "Loading...",
+    "kpis": {
+      "publications": "Publications",
+      "patents": "Patents Filed",
+      "funding": "Funding Secured",
+      "active_projects": "Active Projects"
+    },
+    "title": "Research & Grants",
+    "subtitle": "Scientific production and funding • 2023-24",
+    "charts": {
+      "scientific_production": "Scientific Production Evolution",
+      "funding_sources": "Funding Sources",
+      "pubs_by_inst": "Publications by Institution",
+      "patents_by_inst": "Patents by Institution"
+    },
+    "labels": {
+      "publications": "Publications",
+      "patents": "Patents",
+      "vs_prev_year": "vs N-1"
+    },
+    "funding": {
+      "national": "Ministry",
+      "international": "International",
+      "private": "Private",
+      "eu": "EU Horizon"
+    }
+  },
+  "strategy": {
+    "kpis": {
+      "on_track": "On Track",
+      "at_risk": "At Risk",
+      "delayed": "Delayed"
+    },
+    "title": "Strategic Plan",
+    "subtitle": "Strategic objectives tracking • Horizon 2025",
+    "charts": {
+      "objectives": "Strategic Objectives",
+      "radar_view": "Radar View"
+    },
+    "labels": {
+      "target": "Target"
+    },
+    "status": {
+      "on_track": "On track",
+      "at_risk": "At risk",
+      "delayed": "Delayed"
+    },
+    "objectives": {
+      "academic": "Academic Excellence",
+      "research": "Research & Innovation",
+      "digital": "Digital Transformation",
+      "international": "International Partnerships",
+      "sustainable": "Sustainable Development",
+      "quality": "Governance & Quality"
+    },
+    "radar": {
+      "academic": "Academic",
+      "research": "Research",
+      "digital": "Digital",
+      "international": "International",
+      "sustainable": "Sustainable",
+      "quality": "Quality"
+    }
+  },
+  "analytics": {
+    "loading": "Loading analytics...",
+    "kpis": {
+      "global_score": "Global Score",
+      "ai_models": "Active AI Models",
+      "alerts": "Predictive Alerts",
+      "institutions": "Analyzed Institutions"
+    },
+    "title": "Advanced Analytics",
+    "subtitle": "Correlations, trends and predictive insights • 2023-24",
+    "kpi_subs": {
+      "global_score": "Composite index",
+      "ai_models": "Prediction & Clustering",
+      "alerts": "Automatically detected",
+      "institutions": "Full coverage"
     },
     "charts": {
-      "success_ranking": "Top 10 — Success Rate",
-      "type_distribution": "Distribution by Type"
+      "multi_trend": "Multi-Indicator Trends",
+      "by_type": "Institutions by Type",
+      "ranking": "Employability Ranking"
+    },
+    "labels": {
+      "success": "Success %",
+      "employability": "Employability %",
+      "satisfaction": "Satisfaction %",
+      "enrolled": "Enrolled",
+      "allocated": "Allocated",
+      "consumed": "Consumed"
+    },
+    "ai_preds": {
+      "title": "AI Predictions",
+      "subtitle": "Scikit-learn models trained on historical data 2019-2025",
+      "dropout_risk": "Dropout Risk by Institution",
+      "enrollment_forecast": "Enrollment Forecast 2026-2027",
+      "budget_forecast": "Budget Forecast 2026",
+      "confidence_label": "Confidence"
+    },
+    "table": {
+      "institution": "Institution",
+      "current_rate": "Current Rate",
+      "predicted": "Predicted",
+      "trend": "Trend",
+      "score": "Score",
+      "risk": "Risk",
+      "confidence": "Confidence"
+    }
+  },
+  "institutions": {
+    "title": "Institutions",
+    "subtitle_suffix": "registered institutions",
+    "search_placeholder": "Search an institution...",
+    "all_types": "All types",
+    "table": {
+      "name": "Name",
+      "type": "Type",
+      "location": "Location"
+    },
+    "no_results": "No institution found",
+    "showing_out_of": "institution(s) out of"
+  },
+  "institution_detail": {
+    "loading": "Loading...",
+    "no_data": "No data available",
+    "chart": "Chart",
+    "tabs": {
+      "academic": "Academic",
+      "finance": "Finance",
+      "hr": "HR",
+      "research": "Research",
+      "employment": "Employment",
+      "esg": "ESG",
+      "infrastructure": "Infrastructure",
+      "partnership": "Partnerships"
     }
   }
 }

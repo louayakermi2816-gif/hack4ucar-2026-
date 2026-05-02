@@ -48,12 +48,17 @@ PAGE_MAP = {
 }
 
 
-def _find_page_hint(question: str) -> str:
+def _find_page_hint(question: str, language: str = "fr") -> str:
     """Check if the user is asking about finding a page."""
     q = question.lower()
     for keyword, page in PAGE_MAP.items():
         if keyword in q:
-            return f"\n\n💡 Vous pouvez trouver ces informations sur la page **{page}** dans le menu latéral."
+            if language == "en":
+                return f"\n\n💡 You can find this information on the **{page}** page in the sidebar."
+            elif language == "ar":
+                return f"\n\n💡 يمكنك العثور على هذه المعلومات في صفحة **{page}** في القائمة الجانبية."
+            else:
+                return f"\n\n💡 Vous pouvez trouver ces informations sur la page **{page}** dans le menu latéral."
     return ""
 
 
@@ -114,6 +119,7 @@ def chat_with_mistral(
     user_role: str,
     user_name: str,
     institution_id=None,
+    language: str = "fr",
 ) -> str:
     """Send a question to Mistral with database context."""
     api_key = os.getenv("MISTRAL_API_KEY", "")
@@ -123,20 +129,24 @@ def chat_with_mistral(
     try:
         # Gather DB context
         context = _gather_context(db, user_role, institution_id)
-        page_hint = _find_page_hint(question)
+        page_hint = _find_page_hint(question, language)
+
+        lang_names = {"fr": "French", "en": "English", "ar": "Arabic"}
+        response_lang = lang_names.get(language, "French")
 
         system_prompt = f"""You are UcarOS AI Assistant for the University of Carthage (UCAR).
 You help university leadership analyze KPI data and navigate the platform.
 
 Current user: {user_name} (role: {user_role})
+User's selected language: {response_lang}
 
 Here is the current data from our database:
 {context}
 
 IMPORTANT RULES:
+- YOU MUST RESPOND IN {response_lang.upper()}. This is mandatory.
 - ALWAYS answer the user's SPECIFIC question first. Do NOT dump all data.
 - If the user asks WHERE to find something, tell them which sidebar page to click.
-- Answer in the same language the user writes in (French, English, or Arabic).
 - Be concise — 2-3 sentences maximum unless asked for detail.
 - If you don't have enough data to answer, say so honestly.
 - Reference specific numbers from the data when relevant.
@@ -183,7 +193,64 @@ Available pages in the sidebar:
     except Exception as e:
         logger.error("Mistral chat failed: %s", e)
         # Fallback: try to answer navigation questions without Mistral
-        page_hint = _find_page_hint(question)
+        page_hint = _find_page_hint(question, language)
         if page_hint:
+            if language == "en":
+                return f"I couldn't reach the AI, but here's a hint:{page_hint}"
+            elif language == "ar":
+                return f"لم أتمكن من الاتصال بالذكاء الاصطناعي، ولكن إليك تلميح:{page_hint}"
             return f"Je n'ai pas pu contacter l'IA, mais voici une indication :{page_hint}"
+        if language == "en":
+            return "Sorry, an error occurred with the AI assistant. Please try again."
+        elif language == "ar":
+            return "عذرًا، حدث خطأ في مساعد الذكاء الاصطناعي. يرجى المحاولة مرة أخرى."
         return f"Désolé, une erreur s'est produite avec l'assistant IA. Réessayez dans quelques instants."
+
+def generate_insights(db: Session, selected_ids: list[str], language: str = "fr") -> list[str]:
+    """Ask Mistral to generate 3 actionable insights based on selected institutions."""
+    api_key = os.getenv("MISTRAL_API_KEY", "")
+    if not api_key:
+        return ["La clé API Mistral n'est pas configurée."] * 3
+
+    # Gather Context
+    acad_q = db.query(func.avg(AcademicRecord.success_rate), func.avg(AcademicRecord.dropout_rate))
+    if selected_ids:
+        acad_q = acad_q.filter(AcademicRecord.institution_id.in_(selected_ids))
+    acad = acad_q.first()
+    succ = round(acad[0], 1) if acad and acad[0] else "N/A"
+    drop = round(acad[1], 1) if acad and acad[1] else "N/A"
+
+    prompt = f"""
+    You are an AI analyst for a University President.
+    Current data for selected institutions:
+    - Success Rate: {succ}%
+    - Dropout Rate: {drop}%
+    
+    Write EXACTLY 3 short, actionable insights/bullet points about this data.
+    Do not use introductory text. Just output 3 bullet points starting with a dash (-).
+    Respond in {'French' if language == 'fr' else 'English'}.
+    """
+
+    try:
+        response = httpx.post(
+            "https://api.mistral.ai/v1/chat/completions",
+            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            json={
+                "model": "mistral-small-latest",
+                "messages": [{"role": "user", "content": prompt}],
+                "temperature": 0.4,
+                "max_tokens": 300,
+            },
+            timeout=15.0,
+        )
+        response.raise_for_status()
+        data = response.json()
+        reply = data["choices"][0]["message"]["content"].strip()
+        
+        # Parse bullet points
+        lines = [line.strip().lstrip('-').lstrip('*').strip() for line in reply.split('\n') if line.strip()]
+        return lines[:3]
+    except Exception as e:
+        logger.error("Insights generation failed: %s", e)
+        return ["Analyse IA non disponible pour le moment.", "Vérifiez la connexion réseau.", "Consultez les graphiques pour plus de détails."]
+

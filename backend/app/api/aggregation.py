@@ -26,18 +26,26 @@ def _is_dean(user: User) -> bool:
 
 
 @router.get("/overview")
-def overview(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+def overview(
+    inst_ids: str | None = Query(None, description="Comma-separated UUIDs"),
+    db: Session = Depends(get_db), 
+    user: User = Depends(get_current_user)
+):
     """
     Main dashboard stats.
     President/Admin: sees ALL institutions.
     Dean: sees ONLY their campus.
     """
     dean = _is_dean(user)
+    
+    selected_ids = [i.strip() for i in inst_ids.split(",") if i.strip()] if inst_ids else []
+    if dean:
+        selected_ids = [str(user.institution_id)]
 
     # Institution count
     inst_q = db.query(func.count(Institution.id))
-    if dean:
-        inst_q = inst_q.filter(Institution.id == user.institution_id)
+    if selected_ids:
+        inst_q = inst_q.filter(Institution.id.in_(selected_ids))
     total_institutions = inst_q.scalar()
 
     # Academic averages
@@ -47,8 +55,8 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
         func.avg(AcademicRecord.attendance_rate),
         func.sum(AcademicRecord.enrolled_students),
     )
-    if dean:
-        acad_q = acad_q.filter(AcademicRecord.institution_id == user.institution_id)
+    if selected_ids:
+        acad_q = acad_q.filter(AcademicRecord.institution_id.in_(selected_ids))
     avg_success, avg_dropout, avg_attendance, total_enrolled = acad_q.one()
     total_enrolled = total_enrolled or 0
 
@@ -57,8 +65,8 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
         func.sum(FinanceRecord.budget_allocated),
         func.sum(FinanceRecord.budget_consumed),
     )
-    if dean:
-        fin_q = fin_q.filter(FinanceRecord.institution_id == user.institution_id)
+    if selected_ids:
+        fin_q = fin_q.filter(FinanceRecord.institution_id.in_(selected_ids))
     total_budget, total_consumed = fin_q.one()
 
     # HR totals
@@ -66,8 +74,8 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
         func.sum(HrRecord.teaching_staff_count + HrRecord.admin_staff_count),
         func.sum(HrRecord.teaching_staff_count),
     )
-    if dean:
-        hr_q = hr_q.filter(HrRecord.institution_id == user.institution_id)
+    if selected_ids:
+        hr_q = hr_q.filter(HrRecord.institution_id.in_(selected_ids))
     total_staff, teaching_staff = hr_q.one()
     total_staff = total_staff or 0
     teaching_staff = teaching_staff or 0
@@ -80,15 +88,15 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
         func.sum(ResearchRecord.patents),
         func.sum(ResearchRecord.funding_secured),
     )
-    if dean:
-        res_q = res_q.filter(ResearchRecord.institution_id == user.institution_id)
+    if selected_ids:
+        res_q = res_q.filter(ResearchRecord.institution_id.in_(selected_ids))
     total_publications, total_patents, funding_secured = res_q.one()
     funding_secured = funding_secured or 0
 
     # Alerts
     alert_q = db.query(func.count(Alert.id)).filter(Alert.resolved_at.is_(None))
-    if dean:
-        alert_q = alert_q.filter(Alert.institution_id == user.institution_id)
+    if selected_ids:
+        alert_q = alert_q.filter(Alert.institution_id.in_(selected_ids))
     active_alerts = alert_q.scalar()
 
     return {
@@ -123,6 +131,7 @@ def overview(db: Session = Depends(get_db), user: User = Depends(get_current_use
 def ranking(
     metric: str = Query("success_rate", description="Which metric to rank by"),
     limit: int = Query(10, ge=1, le=33),
+    inst_ids: str | None = Query(None, description="Comma-separated UUIDs"),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -146,6 +155,9 @@ def ranking(
 
     Model, column = metric_map[metric]
     dean = _is_dean(user)
+    selected_ids = [i.strip() for i in inst_ids.split(",") if i.strip()] if inst_ids else []
+    if dean:
+        selected_ids = [str(user.institution_id)]
 
     q = (
         db.query(
@@ -155,8 +167,8 @@ def ranking(
         .join(Model, Model.institution_id == Institution.id)
     )
 
-    if dean:
-        q = q.filter(Model.institution_id == user.institution_id)
+    if selected_ids:
+        q = q.filter(Model.institution_id.in_(selected_ids))
 
     results = (
         q.group_by(Institution.id, Institution.name)

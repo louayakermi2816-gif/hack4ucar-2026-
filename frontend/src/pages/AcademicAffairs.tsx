@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import api from "../api";
 import { useTheme } from "../ThemeProvider";
 import { BookOpen, Award, TrendingUp, CheckCircle, AlertTriangle, ArrowUpRight, ArrowDownRight, ArrowRight } from "lucide-react";
@@ -9,6 +10,7 @@ import {
 } from "recharts";
 
 export default function AcademicAffairs() {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === "dark";
   const accent = isDark ? '#D4AF37' : '#3b82f6';
@@ -38,10 +40,10 @@ export default function AcademicAffairs() {
   const avgAttendance = overview?.academic?.avg_attendance_rate || 0;
 
   const kpis = [
-    { label: "Taux de Réussite", value: `${avgSuccess}%`, icon: <Award size={20} />, trend: "+1.9%", dir: "up" },
-    { label: "Taux d'Abandon", value: `${avgDropout}%`, icon: <AlertTriangle size={20} />, trend: "-0.4%", dir: "down" },
-    { label: "Taux de Présence", value: `${avgAttendance}%`, icon: <CheckCircle size={20} />, trend: "+0.8%", dir: "up" },
-    { label: "Taux de Redoublement", value: "12.3%", icon: <TrendingUp size={20} />, trend: "→ 0.0%", dir: "neutral" },
+    { label: t("academic.kpis.success_rate"), value: `${avgSuccess}%`, icon: <Award size={20} />, trend: "+1.9%", dir: "up" },
+    { label: t("academic.kpis.dropout_rate"), value: `${avgDropout}%`, icon: <AlertTriangle size={20} />, trend: "-0.4%", dir: "down" },
+    { label: t("academic.kpis.attendance_rate"), value: `${avgAttendance}%`, icon: <CheckCircle size={20} />, trend: "+0.8%", dir: "up" },
+    { label: t("academic.kpis.repeat_rate"), value: "12.3%", icon: <TrendingUp size={20} />, trend: "→ 0.0%", dir: "neutral" },
   ];
 
   const semesterTrend = (trends?.academic || []).slice(-8).map((d: any) => ({
@@ -60,9 +62,9 @@ export default function AcademicAffairs() {
     <div className="p-8 overflow-y-auto" style={{ height: 'calc(100vh - 68px)' }}>
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700, color: accent, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-          Affaires Académiques
+          {t("academic.title") || "Affaires Académiques"}
         </h1>
-        <p style={{ color: 'var(--uc-text-muted)', fontSize: 13, marginTop: 4 }}>Performance académique • Année 2023-24</p>
+        <p style={{ color: 'var(--uc-text-muted)', fontSize: 13, marginTop: 4 }}>{t("academic.subtitle") || "Performance académique • Année 2023-24"}</p>
       </div>
 
       {/* KPIs */}
@@ -89,7 +91,7 @@ export default function AcademicAffairs() {
         <div className="uc-card col-span-2" style={{ padding: '24px 28px' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--uc-text)', marginBottom: 20 }}>
             <BookOpen size={16} style={{ display: 'inline', marginRight: 8, color: accent }} />
-            Tendances Semestrielles
+            {t("academic.charts.semester_trends") || "Tendances Semestrielles"}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <LineChart data={semesterTrend}>
@@ -97,9 +99,9 @@ export default function AcademicAffairs() {
               <XAxis dataKey="semester" tick={{ fill: 'var(--uc-text-muted)', fontSize: 11 }} stroke="var(--uc-border)" />
               <YAxis tick={{ fill: 'var(--uc-text-muted)', fontSize: 11 }} stroke="var(--uc-border)" />
               <Tooltip contentStyle={{ background: 'var(--uc-bg-card)', border: '1px solid var(--uc-border)', borderRadius: 10, color: 'var(--uc-text)' }} />
-              <Line type="monotone" dataKey="success" name="Réussite %" stroke={accent} strokeWidth={2.5} dot={{ r: 4, fill: accent }} />
-              <Line type="monotone" dataKey="attendance" name="Présence %" stroke="#22c55e" strokeWidth={2} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="dropout" name="Abandon %" stroke="#ef4444" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="success" name={t("academic.labels.success") || "Réussite %"} stroke={accent} strokeWidth={2.5} dot={{ r: 4, fill: accent }} />
+              <Line type="monotone" dataKey="attendance" name={t("academic.labels.attendance") || "Présence %"} stroke="#22c55e" strokeWidth={2} dot={{ r: 3 }} />
+              <Line type="monotone" dataKey="dropout" name={t("academic.labels.dropout") || "Abandon %"} stroke="#ef4444" strokeWidth={2} dot={{ r: 3 }} />
               <Legend wrapperStyle={{ color: 'var(--uc-text-muted)', fontSize: 11 }} />
             </LineChart>
           </ResponsiveContainer>
@@ -108,7 +110,7 @@ export default function AcademicAffairs() {
         {/* Radar Chart */}
         <div className="uc-card" style={{ padding: '24px 28px' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--uc-text)', marginBottom: 20 }}>
-            Performance Globale
+            {t("academic.charts.global_performance") || "Performance Globale"}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <RadarChart data={radarData}>
@@ -125,7 +127,7 @@ export default function AcademicAffairs() {
       <div className="grid grid-cols-2 gap-5">
         <div className="uc-card" style={{ padding: '24px 28px' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--uc-text)', marginBottom: 20 }}>
-            Top Établissements — Taux de Réussite
+            {t("academic.charts.top_success") || "Top Établissements — Taux de Réussite"}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={rankingSuccess || []} layout="vertical" margin={{ left: 140 }}>
@@ -133,13 +135,13 @@ export default function AcademicAffairs() {
               <XAxis type="number" tick={{ fill: 'var(--uc-text-muted)', fontSize: 11 }} stroke="var(--uc-border)" domain={[0, 100]} />
               <YAxis type="category" dataKey="institution" tick={{ fill: 'var(--uc-text-muted)', fontSize: 9 }} stroke="var(--uc-border)" width={135} />
               <Tooltip contentStyle={{ background: 'var(--uc-bg-card)', border: '1px solid var(--uc-border)', borderRadius: 10, color: 'var(--uc-text)' }} />
-              <Bar dataKey="value" name="Réussite %" fill={accent} radius={[0, 6, 6, 0]} barSize={16} />
+              <Bar dataKey="value" name={t("academic.labels.success") || "Réussite %"} fill={accent} radius={[0, 6, 6, 0]} barSize={16} />
             </BarChart>
           </ResponsiveContainer>
         </div>
         <div className="uc-card" style={{ padding: '24px 28px' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--uc-text)', marginBottom: 20 }}>
-            Taux d'Abandon par Établissement
+            {t("academic.charts.dropout_by_inst") || "Taux d'Abandon par Établissement"}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={rankingDropout || []} layout="vertical" margin={{ left: 140 }}>
@@ -147,7 +149,7 @@ export default function AcademicAffairs() {
               <XAxis type="number" tick={{ fill: 'var(--uc-text-muted)', fontSize: 11 }} stroke="var(--uc-border)" />
               <YAxis type="category" dataKey="institution" tick={{ fill: 'var(--uc-text-muted)', fontSize: 9 }} stroke="var(--uc-border)" width={135} />
               <Tooltip contentStyle={{ background: 'var(--uc-bg-card)', border: '1px solid var(--uc-border)', borderRadius: 10, color: 'var(--uc-text)' }} />
-              <Bar dataKey="value" name="Abandon %" fill="#ef4444" radius={[0, 6, 6, 0]} barSize={16} />
+              <Bar dataKey="value" name={t("academic.labels.dropout") || "Abandon %"} fill="#ef4444" radius={[0, 6, 6, 0]} barSize={16} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -157,11 +159,12 @@ export default function AcademicAffairs() {
 }
 
 function Loader({ accent }: { accent: string }) {
+  const { t } = useTranslation();
   return (
     <div className="flex items-center justify-center" style={{ height: '60vh' }}>
       <div className="flex flex-col items-center gap-4">
         <div style={{ width: 48, height: 48, border: '3px solid var(--uc-border)', borderTopColor: accent, borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-        <span style={{ color: 'var(--uc-text-muted)', fontSize: 14, fontWeight: 500 }}>Chargement des données académiques...</span>
+        <span style={{ color: 'var(--uc-text-muted)', fontSize: 14, fontWeight: 500 }}>{t("academic.loading") || "Chargement des données académiques..."}</span>
       </div>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>

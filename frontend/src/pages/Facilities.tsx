@@ -1,4 +1,5 @@
 import { useTheme } from "../ThemeProvider";
+import { useTranslation } from "react-i18next";
 import { Building2, Wrench, MonitorSmartphone, Zap, ArrowUpRight, ArrowDownRight, ArrowRight } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -7,38 +8,39 @@ import {
 
 export default function Facilities() {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const isDark = theme === "dark";
   const accent = isDark ? '#D4AF37' : '#3b82f6';
   const accentLight = isDark ? 'rgba(212,175,55,0.15)' : 'rgba(59,130,246,0.15)';
 
   const kpis = [
-    { label: "Taux d'Occupation", value: "78.5%", icon: <Building2 size={20} />, trend: "+2.1%", dir: "up" },
-    { label: "Travaux en Cours", value: "14", icon: <Wrench size={20} />, trend: "+3", dir: "up" },
-    { label: "Postes Connectés", value: "4,280", icon: <MonitorSmartphone size={20} />, trend: "+8.4%", dir: "up" },
-    { label: "Conso. Énergétique", value: "2.4 GWh", icon: <Zap size={20} />, trend: "-3.2%", dir: "down" },
+    { label: t("facilities.kpis.occupancy"), value: "78.5%", icon: <Building2 size={20} />, trend: "+2.1%", dir: "up" },
+    { label: t("facilities.kpis.works"), value: "14", icon: <Wrench size={20} />, trend: "+3", dir: "up" },
+    { label: t("facilities.kpis.connected"), value: "4,280", icon: <MonitorSmartphone size={20} />, trend: "+8.4%", dir: "up" },
+    { label: t("facilities.kpis.energy"), value: "2.4 GWh", icon: <Zap size={20} />, trend: "-3.2%", dir: "down" },
   ];
 
   const occupancyByType = [
-    { type: "Amphithéâtres", rate: 85 },
-    { type: "Salles TD", rate: 72 },
-    { type: "Laboratoires", rate: 68 },
-    { type: "Bibliothèques", rate: 91 },
-    { type: "Salles Info.", rate: 82 },
+    { type: t("facilities.types.amphi"), rate: 85 },
+    { type: t("facilities.types.td"), rate: 72 },
+    { type: t("facilities.types.lab"), rate: 68 },
+    { type: t("facilities.types.lib"), rate: 91 },
+    { type: t("facilities.types.info"), rate: 82 },
   ];
 
   const equipmentStatus = [
-    { name: "Opérationnel", value: 72, color: "#22c55e" },
-    { name: "Maintenance", value: 18, color: isDark ? '#D4AF37' : '#3b82f6' },
-    { name: "Hors Service", value: 10, color: "#ef4444" },
+    { name: t("facilities.status.operational"), value: 72, color: "#22c55e" },
+    { name: t("facilities.status.maintenance"), value: 18, color: isDark ? '#D4AF37' : '#3b82f6' },
+    { name: t("facilities.status.out"), value: 10, color: "#ef4444" },
   ];
 
   return (
     <div className="p-8 overflow-y-auto" style={{ height: 'calc(100vh - 68px)' }}>
       <div style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: 22, fontWeight: 700, color: accent, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-          Infrastructures & Équipements
+          {t("facilities.title")}
         </h1>
-        <p style={{ color: 'var(--uc-text-muted)', fontSize: 13, marginTop: 4 }}>Gestion des espaces et ressources matérielles • 2023-24</p>
+        <p style={{ color: 'var(--uc-text-muted)', fontSize: 13, marginTop: 4 }}>{t("facilities.subtitle")}</p>
       </div>
 
       <div className="grid grid-cols-4 gap-5" style={{ marginBottom: 28 }}>
@@ -60,7 +62,7 @@ export default function Facilities() {
       <div className="grid grid-cols-3 gap-5">
         <div className="uc-card col-span-2" style={{ padding: '24px 28px' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--uc-text)', marginBottom: 20 }}>
-            Taux d'Occupation par Type d'Espace
+            {t("facilities.charts.occupancy")}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={occupancyByType}>
@@ -75,7 +77,7 @@ export default function Facilities() {
 
         <div className="uc-card" style={{ padding: '24px 28px' }}>
           <h3 style={{ fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--uc-text)', marginBottom: 20 }}>
-            État des Équipements
+            {t("facilities.charts.status")}
           </h3>
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>

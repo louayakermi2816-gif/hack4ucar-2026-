@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import api from "../api";
 import SectionTitle from "../components/ui/SectionTitle";
+import { useTranslation } from "react-i18next";
 
 const TABS = [
   { key: "academic", label: "Académique", endpoint: "academic" },
@@ -17,6 +18,7 @@ const TABS = [
 ];
 
 export default function InstitutionDetail() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [activeTab, setActiveTab] = useState("academic");
   const { data: inst } = useQuery({ queryKey: ["institution", id], queryFn: () => api.get(`/api/institutions/${id}`).then(r => r.data) });
@@ -29,7 +31,7 @@ export default function InstitutionDetail() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <SectionTitle title={inst?.name || "Chargement..."} accentColor="border-blue-500" accentBg="bg-blue-500/10" />
+        <SectionTitle title={inst?.name || (t("institution_detail.loading") || "Chargement...")} />
         <div className="flex gap-3 mt-4">
           {inst && (<>
             <span className="px-3 py-1.5 text-[11px] font-medium rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">{inst.institution_type}</span>
@@ -41,16 +43,16 @@ export default function InstitutionDetail() {
         {TABS.map(t => (
           <button key={t.key} onClick={() => setActiveTab(t.key)}
             className={`px-4 py-2.5 rounded-xl text-[12px] font-semibold transition-all cursor-pointer ${activeTab === t.key ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" : "bg-zinc-900 border border-white/[0.06] text-zinc-400 hover:text-zinc-200 hover:border-white/[0.1]"}`}
-          >{t.label}</button>
+          >{t("institution_detail.tabs." + t.key) || t.label}</button>
         ))}
       </div>
       {isLoading ? (
         <div className="flex items-center justify-center h-40"><div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" /></div>
       ) : records.length === 0 ? (
-        <div className="bg-zinc-900 rounded-2xl border border-white/[0.06] p-16 text-center text-zinc-500 text-[14px] font-medium">Aucune donnée disponible</div>
+        <div className="bg-zinc-900 rounded-2xl border border-white/[0.06] p-16 text-center text-zinc-500 text-[14px] font-medium">{t("institution_detail.no_data") || "Aucune donnée disponible"}</div>
       ) : (<>
         <div className="bg-zinc-900 rounded-2xl border border-white/[0.06] p-6">
-          <SectionTitle title={`Graphique — ${tab.label}`} />
+          <SectionTitle title={`${t("institution_detail.chart") || "Graphique"} — ${t("institution_detail.tabs." + tab.key) || tab.label}`} />
           <div className="mt-5">
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={records}>

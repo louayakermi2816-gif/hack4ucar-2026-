@@ -8,6 +8,7 @@ import { useState } from "react";
 import api from "../api";
 import SectionTitle from "../components/ui/SectionTitle";
 import { Search } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface Institution {
   id: string;
@@ -17,6 +18,7 @@ interface Institution {
 }
 
 export default function InstitutionsList() {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("");
   const navigate = useNavigate();
@@ -48,10 +50,8 @@ export default function InstitutionsList() {
   return (
     <div className="flex flex-col gap-6">
       <SectionTitle
-        title="Institutions"
-        subtitle={`${institutions.length} établissements enregistrés`}
-        accentColor="border-blue-500"
-        accentBg="bg-blue-500/10"
+        title={t("institutions.title") || "Institutions"}
+        subtitle={`${institutions.length} ${t("institutions.subtitle_suffix") || "établissements enregistrés"}`}
       />
 
       {/* Filters */}
@@ -63,7 +63,7 @@ export default function InstitutionsList() {
           />
           <input
             type="text"
-            placeholder="Rechercher un établissement..."
+            placeholder={t("institutions.search_placeholder") || "Rechercher un établissement..."}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-900 border border-white/[0.06] text-zinc-200 text-[13px] font-medium placeholder-zinc-600 focus:outline-none focus:border-amber-500/40 focus:ring-1 focus:ring-amber-500/20 transition-all"
@@ -74,7 +74,7 @@ export default function InstitutionsList() {
           onChange={(e) => setFilterType(e.target.value)}
           className="px-4 py-3 rounded-xl bg-zinc-900 border border-white/[0.06] text-zinc-200 text-[13px] font-medium focus:outline-none focus:border-amber-500/40 cursor-pointer"
         >
-          <option value="">Tous les types</option>
+          <option value="">{t("institutions.all_types") || "Tous les types"}</option>
           {types.map((t: string) => (
             <option key={t} value={t}>
               {t}
@@ -89,13 +89,13 @@ export default function InstitutionsList() {
           <thead>
             <tr className="border-b border-white/[0.06]">
               <th className="text-left px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-zinc-500">
-                Nom
+                {t("institutions.table.name") || "Nom"}
               </th>
               <th className="text-left px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-zinc-500">
-                Type
+                {t("institutions.table.type") || "Type"}
               </th>
               <th className="text-left px-6 py-4 text-[11px] font-bold uppercase tracking-widest text-zinc-500">
-                Localisation
+                {t("institutions.table.location") || "Localisation"}
               </th>
             </tr>
           </thead>
@@ -123,13 +123,13 @@ export default function InstitutionsList() {
         </table>
         {filtered.length === 0 && (
           <div className="text-center py-16 text-zinc-500 text-[14px] font-medium">
-            Aucune institution trouvée
+            {t("institutions.no_results") || "Aucune institution trouvée"}
           </div>
         )}
       </div>
 
       <p className="text-[12px] font-medium text-zinc-500">
-        {filtered.length} institution(s) sur {institutions.length}
+        {filtered.length} {t("institutions.showing_out_of") || "institution(s) sur"} {institutions.length}
       </p>
     </div>
   );

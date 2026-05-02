@@ -1,13 +1,20 @@
 {
   "login": {
-    "title": "تسجيل الدخول",
+    "title": "مرحباً",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
-    "button": "دخول",
-    "loading": "جاري الدخول...",
-    "demo_accounts": "حسابات تجريبية:",
-    "no_account": "ليس لديك حساب؟",
-    "signup": "إنشاء حساب"
+    "button": "تسجيل الدخول",
+    "loading": "جارٍ تسجيل الدخول...",
+    "demo_accounts": "وصول سريع تجريبي",
+    "no_account": "ليس لديك حساب بعد؟",
+    "signup": "سجل هنا",
+    "hero_title": "إدارة جامعتك بكل سهولة.",
+    "hero_subtitle": "منصة ذكاء القرار المصممة خصيصًا لجامعة قرطاج.",
+    "subtitle": "تسجيل الدخول للوصول إلى مساحة ذكاء القرار الخاصة بك.",
+    "email_placeholder": "you@university.tn",
+    "help": "الحصول على المساعدة",
+    "forgot_password": "نسيت كلمة المرور أو البريد الإلكتروني؟",
+    "learn_more": "معرفة المزيد عن تسجيل الدخول"
   },
   "register": {
     "title": "إنشاء حساب",
@@ -19,11 +26,12 @@
       "student": "طالب",
       "researcher": "باحث",
       "dean": "عميد",
-      "admin": "مسؤول"
+      "admin": "مدير",
+      "president": "رئيس"
     },
-    "secret_code": "رمز المصادقة (UCAR)",
-    "button": "تسجيل",
-    "loading": "جاري الإنشاء...",
+    "secret_code": "رمز تفويض UCAR",
+    "button": "إنشاء الحساب",
+    "loading": "جارٍ الإنشاء...",
     "has_account": "لديك حساب بالفعل؟",
     "signin": "تسجيل الدخول"
   },
@@ -39,36 +47,48 @@
     "analytics": "التحليلات",
     "upload": "استيراد البيانات",
     "settings": "الإعدادات",
-    "breadcrumb": "المستشار الجامعي"
+    "alerts": "التنبيهات"
+  },
+  "header": {
+    "breadcrumb": "رئاسة الجامعة",
+    "search": "البحث في الصفحات...",
+    "no_results": "لا توجد نتائج",
+    "notifications": "الإشعارات",
+    "mark_read": "تحديد الكل كمقروء",
+    "view_all": "عرض جميع الإشعارات",
+    "profile": "ملفي الشخصي",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج",
+    "select_institution": "اختر المؤسسة"
   },
   "settings": {
     "title": "الإعدادات",
-    "subtitle": "تهيئة وتفضيلات النظام",
-    "saved": "تم حفظ التعديلات",
+    "subtitle": "تكوين النظام والتفضيلات",
+    "saved": "تم حفظ التغييرات",
     "appearance": "المظهر",
     "theme": "السمة",
     "theme_desc": "اختر بين الوضع الداكن والوضع الفاتح",
     "dark": "داكن",
     "light": "فاتح",
-    "language": "اللغة",
-    "language_label": "لغة الواجهة",
-    "language_desc": "غيّر لغة عرض المنصة",
     "profile": "الملف الشخصي",
     "full_name": "الاسم الكامل",
     "email": "البريد الإلكتروني",
-    "role_label": "الدور",
+    "role": "الدور",
     "edit": "تعديل",
     "save": "حفظ",
+    "language": "اللغة",
+    "lang_label": "لغة الواجهة",
+    "lang_desc": "اختر لغة التطبيق",
     "notifications": "الإشعارات",
     "kpi_alerts": "تنبيهات المؤشرات",
-    "kpi_alerts_desc": "استقبل تنبيهات عند تجاوز المؤشرات للحدود",
+    "kpi_alerts_desc": "تلقي إشعارات عند تجاوز المؤشرات للحدود",
     "weekly_reports": "التقارير الأسبوعية",
-    "weekly_reports_desc": "ملخص تلقائي كل يوم اثنين صباحاً",
+    "weekly_reports_desc": "ملخص تلقائي كل يوم اثنين",
     "system_updates": "تحديثات النظام",
-    "system_updates_desc": "إشعارات الصيانة والمميزات الجديدة",
+    "system_updates_desc": "إشعارات الصيانة والميزات الجديدة",
     "security": "الأمان",
     "2fa": "المصادقة الثنائية",
-    "2fa_desc": "أضف طبقة حماية إضافية",
+    "2fa_desc": "أضف طبقة أمان إضافية",
     "sessions": "الجلسات النشطة",
     "sessions_desc": "جلستان نشطتان على هذا الجهاز",
     "manage": "إدارة",
@@ -78,81 +98,362 @@
   },
   "alerts": {
     "title": "التنبيهات",
-    "subtitle": "حالات شاذة اكتشفها النظام",
-    "all_severities": "كل المستويات",
-    "all_domains": "كل المجالات",
+    "subtitle": "الحالات الشاذة التي رصدها النظام",
+    "all_severities": "جميع مستويات الخطورة",
     "high": "عالية",
     "medium": "متوسطة",
     "low": "منخفضة",
-    "none": "لا توجد تنبيهات"
-  },
-  "notifications": {
-    "title": "الإشعارات",
-    "mark_read": "تحديد الكل كمقروء",
-    "view_all": "عرض كل الإشعارات",
-    "items": {
-      "dropout": "تم اكتشاف معدل تسرب مرتفع في FST",
-      "budget": "تم تنفيذ 92% من ميزانية الربع الثاني",
-      "report": "تقرير أسبوعي جديد متاح",
-      "publications": "تمت إضافة 3 منشورات جديدة"
-    }
-  },
-  "profile_menu": {
-    "my_profile": "ملفي الشخصي",
-    "settings": "الإعدادات",
-    "logout": "تسجيل الخروج"
-  },
-  "search": {
-    "placeholder": "...البحث في الصفحات"
+    "all_domains": "جميع المجالات",
+    "no_alerts": "لا توجد تنبيهات"
   },
   "upload": {
     "title": "استيراد البيانات",
-    "subtitle": "CSV, Excel أو PDF",
+    "subtitle": "CSV أو Excel أو PDF",
     "institution": "المؤسسة",
-    "select_institution": "...اختر مؤسسة",
-    "drop_zone": "اسحب ملفاً هنا أو انقر للتصفح",
+    "select_inst": "اختر مؤسسة...",
+    "drop_text": "اسحب ملفاً هنا أو انقر للتصفح",
     "file_types": "CSV, XLSX, XLS, PDF",
     "button": "استيراد الملف",
-    "loading": "جاري الاستيراد...",
+    "loading": "جارٍ الاستيراد...",
     "success": "تم الاستيراد بنجاح",
     "type_detected": "النوع المكتشف",
     "rows_imported": "الصفوف المستوردة",
-    "access_denied": "وصول مرفوض",
-    "admin_only": "فقط المسؤول يمكنه استيراد الملفات"
-  },
-  "faculty_modal": {
-    "title": "اختر مؤسستك",
-    "subtitle": "اختر المؤسسة التي ترغب في إدارتها لهذه الجلسة.",
-    "search": "...ابحث عن كلية أو معهد",
-    "none": "لم يتم العثور على مؤسسات.",
-    "close": "إغلاق"
+    "access_denied": "تم رفض الوصول",
+    "admin_only": "فقط المدير يمكنه استيراد الملفات"
   },
   "roles": {
-    "admin": "مسؤول",
+    "admin": "مدير",
     "president": "رئيس",
     "dean": "عميد",
     "researcher": "باحث",
     "student": "طالب"
   },
+  "faculty_modal": {
+    "title": "اختر مؤسستك",
+    "subtitle": "اختر المؤسسة التي تريد إدارتها في هذه الجلسة.",
+    "search": "البحث عن كلية أو معهد...",
+    "none_found": "لم يتم العثور على مؤسسة.",
+    "close": "إغلاق"
+  },
+  "notifications_data": {
+    "n1": "معدل تسرب مرتفع في FST",
+    "n2": "تنفيذ ميزانية الربع الثاني بنسبة 92%",
+    "n3": "تقرير أسبوعي جديد متاح",
+    "n4": "تمت إضافة 3 منشورات جديدة"
+  },
+  "chat": {
+    "title": "مساعد UcarOS الذكي",
+    "welcome": "مرحبًا! أنا مساعد UcarOS الذكي. اسألني عن مؤشرات الأداء. 🎓",
+    "placeholder": "اطرح سؤالاً...",
+    "error": "عذرًا، حدث خطأ. يرجى المحاولة مرة أخرى."
+  },
+  "facilities": {
+    "title": "المرافق والمعدات",
+    "subtitle": "إدارة المساحات والموارد المادية • 2023-24",
+    "kpis": {
+      "occupancy": "معدل الإشغال",
+      "works": "أشغال جارية",
+      "connected": "الأجهزة المتصلة",
+      "energy": "استهلاك الطاقة"
+    },
+    "types": {
+      "amphi": "المدرجات",
+      "td": "قاعات الدروس",
+      "lab": "المختبرات",
+      "lib": "المكتبات",
+      "info": "قاعات الإعلامية"
+    },
+    "status": {
+      "operational": "صالح للاستعمال",
+      "maintenance": "في الصيانة",
+      "out": "خارج الخدمة"
+    },
+    "charts": {
+      "occupancy": "معدل الإشغال حسب نوع الفضاء",
+      "status": "حالة المعدات"
+    }
+  },
+  "enrollment": {
+    "title": "التسجيل والأعداد",
+    "subtitle": "السنة الجامعية 2023-24 • نظرة عامة على التسجيل",
+    "kpis": {
+      "total": "إجمالي المسجلين",
+      "success": "معدل النجاح",
+      "dropout": "معدل الانقطاع",
+      "attendance": "معدل الحضور",
+      "vs_last_year": "مقارنة بالعام الماضي"
+    },
+    "types": {
+      "faculties": "كليات",
+      "schools": "مدارس",
+      "institutes": "معاهد"
+    },
+    "charts": {
+      "evolution": "تطور التسجيل (2019-2025)",
+      "enrolled": "المسجلين",
+      "distribution": "التوزيع حسب النوع",
+      "ranking": "الترتيب حسب معدل النجاح",
+      "success_rate": "معدل النجاح (%)"
+    },
+    "loading": "جاري تحميل التسجيلات..."
+  },
+  "finance": {
+    "title": "المالية والميزانية",
+    "subtitle": "التنفيذ والمتابعة المالية • 2023-24",
+    "kpis": {
+      "total_budget": "الميزانية الإجمالية",
+      "consumed_budget": "الميزانية المستهلكة",
+      "execution_rate": "نسبة التنفيذ",
+      "cost_per_student": "التكلفة/طالب",
+      "yoy": "سنويًا"
+    },
+    "expenses": {
+      "salaries": "الرواتب",
+      "infrastructure": "البنية التحتية",
+      "research": "البحث العلمي",
+      "equipment": "المعدات",
+      "others": "أخرى"
+    },
+    "charts": {
+      "budget_trend": "الميزانية المخصصة والمستهلكة (مليون دينار)",
+      "allocated_legend": "المخصصة (م)",
+      "consumed_legend": "المستهلكة (م)",
+      "expense_breakdown": "توزيع النفقات",
+      "budget_by_inst": "الميزانية حسب المؤسسة",
+      "budget_tooltip": "الميزانية (دينار)",
+      "cost_per_student": "التكلفة حسب الطالب",
+      "cost_tooltip": "التكلفة/طالب (دينار)"
+    },
+    "loading": "جاري تحميل المالية..."
+  },
   "sidebar": {
     "dashboard": "لوحة القيادة",
     "institutions": "المؤسسات",
     "alerts": "التنبيهات",
-    "upload": "إدراج البيانات",
-    "logout": "تسجيل الخروج"
+    "upload": "الاستيراد",
+    "logout": "تسجيل الخروج",
+    "facilities": "المرافق"
   },
   "dashboard": {
-    "title": "نظرة عامة (UCAR)",
+    "title": "نظرة عامة على UCAR",
     "subtitle": "جامعة قرطاج",
-    "cards": {
-      "institutions": "المؤسسات",
-      "success_rate": "متوسط نسبة النجاح",
-      "budget": "إجمالي الميزانية المخصصة (TND)",
-      "alerts": "تنبيهات نشطة"
+    "page_title": "لوحة القيادة الاستراتيجية للرئيس",
+    "page_subtitle": "السنة الجامعية 2023-24 • نظرة تحليلية آنية",
+    "loading": "جارٍ تحميل لوحة القيادة...",
+    "kpi": {
+      "enrollment": "التسجيل",
+      "research_grants": "منح البحث",
+      "faculty_size": "هيئة التدريس",
+      "success_rate": "معدل النجاح",
+      "budget_exec": "تنفيذ الميزانية",
+      "publications": "المنشورات",
+      "vs_last_year": "مقارنة بالعام السابق",
+      "ytd": "منذ بداية العام"
     },
     "charts": {
-      "success_ranking": "أفضل 10 - نسبة النجاح",
+      "enrollment_trends": "اتجاهات التسجيل (2018-2023)",
+      "undergraduate": "ليسانس",
+      "graduate": "ماجستير/دكتوراه",
+      "research_funding": "تمويل البحث حسب القطاع (2024)",
+      "total": "المجموع",
+      "performance_trends": "اتجاهات الأداء الأكاديمي",
+      "success_rate_label": "معدل النجاح",
+      "retention_rate": "معدل الاحتفاظ",
+      "faculty_rankings": "تصنيف أداء الكليات",
+      "institution": "المؤسسة",
+      "students": "الطلاب",
+      "trend": "الاتجاه",
+      "success_ranking": "أفضل 10 — معدل النجاح",
       "type_distribution": "التوزيع حسب النوع"
+    },
+    "cards": {
+      "institutions": "المؤسسات",
+      "success_rate": "معدل النجاح المتوسط",
+      "budget": "إجمالي الميزانية المخصصة (دينار)",
+      "alerts": "التنبيهات النشطة"
+    }
+  },
+  "academic": {
+    "kpis": {
+      "success_rate": "معدل النجاح",
+      "dropout_rate": "معدل الانقطاع",
+      "attendance_rate": "معدل الحضور",
+      "repeat_rate": "معدل الرسوب"
+    },
+    "title": "الشؤون الأكاديمية",
+    "subtitle": "الأداء الأكاديمي • سنة 2023-24",
+    "charts": {
+      "semester_trends": "الاتجاهات الفصلية",
+      "global_performance": "الأداء العام",
+      "top_success": "أفضل المؤسسات — نسبة النجاح",
+      "dropout_by_inst": "نسبة الانقطاع حسب المؤسسة"
+    },
+    "labels": {
+      "success": "نسبة النجاح %",
+      "attendance": "نسبة الحضور %",
+      "dropout": "نسبة الانقطاع %"
+    },
+    "loading": "جارٍ تحميل البيانات الأكاديمية..."
+  },
+  "faculty": {
+    "loading": "جارٍ التحميل...",
+    "kpis": {
+      "total_staff": "إجمالي الموظفين",
+      "teaching_staff": "أعضاء هيئة التدريس",
+      "ratio": "نسبة الطلاب/الأساتذة",
+      "training_hours": "ساعات التدريب"
+    },
+    "title": "هيئة التدريس والموظفين",
+    "subtitle": "الموارد البشرية والتطوير المهني • 2023-24",
+    "charts": {
+      "workforce_evolution": "تطور القوى العاملة",
+      "distribution": "توزيع الموظفين"
+    },
+    "labels": {
+      "teaching": "هيئة التدريس",
+      "admin": "الإدارة",
+      "training": "ساعات التدريب",
+      "technical": "فني"
+    }
+  },
+  "research": {
+    "loading": "جارٍ التحميل...",
+    "kpis": {
+      "publications": "المنشورات",
+      "patents": "براءات الاختراع",
+      "funding": "التمويل المكتسب",
+      "active_projects": "المشاريع النشطة"
+    },
+    "title": "البحوث والمنح",
+    "subtitle": "الإنتاج العلمي والتمويل • 2023-24",
+    "charts": {
+      "scientific_production": "تطور الإنتاج العلمي",
+      "funding_sources": "مصادر التمويل",
+      "pubs_by_inst": "المنشورات حسب المؤسسة",
+      "patents_by_inst": "براءات الاختراع حسب المؤسسة"
+    },
+    "labels": {
+      "publications": "المنشورات",
+      "patents": "براءات الاختراع",
+      "vs_prev_year": "مقارنة بالعام الماضي"
+    },
+    "funding": {
+      "national": "الوزارة",
+      "international": "دولي",
+      "private": "خاص",
+      "eu": "أفق أوروبا"
+    }
+  },
+  "strategy": {
+    "kpis": {
+      "on_track": "في المسار الصحيح",
+      "at_risk": "تحت المراقبة",
+      "delayed": "متأخر"
+    },
+    "title": "الخطة الاستراتيجية",
+    "subtitle": "تتبع الأهداف الاستراتيجية • آفاق 2025",
+    "charts": {
+      "objectives": "الأهداف الاستراتيجية",
+      "radar_view": "عرض الرادار"
+    },
+    "labels": {
+      "target": "الهدف"
+    },
+    "status": {
+      "on_track": "على المسار الصحيح",
+      "at_risk": "في خطر",
+      "delayed": "متأخر"
+    },
+    "objectives": {
+      "academic": "التميز الأكاديمي",
+      "research": "البحث والابتكار",
+      "digital": "التحول الرقمي",
+      "international": "شراكات دولية",
+      "sustainable": "تنمية مستدامة",
+      "quality": "الحوكمة والجودة"
+    },
+    "radar": {
+      "academic": "أكاديمي",
+      "research": "البحث",
+      "digital": "الرقمي",
+      "international": "دولي",
+      "sustainable": "مستدام",
+      "quality": "الجودة"
+    }
+  },
+  "analytics": {
+    "loading": "جاري تحميل التحليلات...",
+    "kpis": {
+      "global_score": "النتيجة الإجمالية",
+      "ai_models": "نماذج الذكاء الاصطناعي النشطة",
+      "alerts": "التنبيهات التنبؤية",
+      "institutions": "المؤسسات المحللة"
+    },
+    "title": "تحليلات متقدمة",
+    "subtitle": "الارتباطات والاتجاهات والرؤى التنبؤية • 2023-24",
+    "kpi_subs": {
+      "global_score": "مؤشر مركب",
+      "ai_models": "التنبؤ والتجميع",
+      "alerts": "تم الكشف عنها تلقائيا",
+      "institutions": "تغطية شاملة"
+    },
+    "charts": {
+      "multi_trend": "اتجاهات متعددة المؤشرات",
+      "by_type": "المؤسسات حسب النوع",
+      "ranking": "ترتيب التوظيف"
+    },
+    "labels": {
+      "success": "نسبة النجاح %",
+      "employability": "نسبة التوظيف %",
+      "satisfaction": "نسبة الرضا %",
+      "enrolled": "المسجلون",
+      "allocated": "المخصص",
+      "consumed": "المستهلك"
+    },
+    "ai_preds": {
+      "title": "تنبؤات الذكاء الاصطناعي",
+      "subtitle": "نماذج تعلم الآلة المدربة على البيانات التاريخية 2019-2025",
+      "dropout_risk": "خطر الانقطاع حسب المؤسسة",
+      "enrollment_forecast": "توقعات التسجيل 2026-2027",
+      "budget_forecast": "توقعات الميزانية 2026",
+      "confidence_label": "الثقة"
+    },
+    "table": {
+      "institution": "المؤسسة",
+      "current_rate": "المعدل الحالي",
+      "predicted": "المتوقع",
+      "trend": "الاتجاه",
+      "score": "النتيجة",
+      "risk": "الخطر",
+      "confidence": "الثقة"
+    }
+  },
+  "institutions": {
+    "title": "المؤسسات",
+    "subtitle_suffix": "مؤسسات مسجلة",
+    "search_placeholder": "ابحث عن مؤسسة...",
+    "all_types": "جميع الأنواع",
+    "table": {
+      "name": "الاسم",
+      "type": "النوع",
+      "location": "الموقع"
+    },
+    "no_results": "لم يتم العثور على أي مؤسسة",
+    "showing_out_of": "مؤسسة (مؤسسات) من أصل"
+  },
+  "institution_detail": {
+    "loading": "جارٍ التحميل...",
+    "no_data": "لا توجد بيانات متاحة",
+    "chart": "مخطط",
+    "tabs": {
+      "academic": "أكاديمي",
+      "finance": "مالية",
+      "hr": "موارد بشرية",
+      "research": "أبحاث",
+      "employment": "توظيف",
+      "esg": "بيئة واجتماع وحوكمة",
+      "infrastructure": "بنية تحتية",
+      "partnership": "شراكات"
     }
   }
 }

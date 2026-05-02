@@ -16,19 +16,13 @@ export default function LoginPage() {
   const [showDeanModal, setShowDeanModal] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme, setTheme } = useTheme();
   const isDark = theme === "dark";
 
   useEffect(() => {
-    if (user && !loading) {
-      if (user.role === "dean" && !user.institution_id) {
-        setShowDeanModal(true);
-      } else if (!showDeanModal) {
-        navigate("/", { replace: true });
-      }
-    }
-  }, [user, loading, navigate, showDeanModal]);
+    if (user && !showDeanModal && !loading) navigate("/", { replace: true });
+  }, [user, showDeanModal, loading, navigate]);
 
   const toggleLanguage = () => {
     const nextLang = i18n.language === "fr" ? "en" : i18n.language === "en" ? "ar" : "fr";
@@ -146,10 +140,10 @@ export default function LoginPage() {
           <h1 style={{ fontSize: 48, fontWeight: 800, letterSpacing: '-0.02em', color: accent, marginTop: 8 }}>UcarOS</h1>
         </div>
         <h2 style={{ fontSize: 40, lineHeight: 1.2, fontWeight: 800, color: heroTextColor, letterSpacing: '-0.02em', marginBottom: 24, maxWidth: 500 }}>
-          Gérez votre université en toute simplicité.
+          {t("login.hero_title") || "Gérez votre université en toute simplicité."}
         </h2>
         <p style={{ fontSize: 17, color: heroSubColor, fontWeight: 500, maxWidth: 450, marginBottom: 48, lineHeight: 1.7 }}>
-          La plateforme d'intelligence décisionnelle conçue spécifiquement pour l'Université de Carthage.
+          {t("login.hero_subtitle") || "La plateforme d'intelligence décisionnelle conçue spécifiquement pour l'Université de Carthage."}
         </p>
         <div style={{ width: '100%', maxWidth: 450, height: 260, background: heroIllustrationBg, borderRadius: 32, border: `1px solid ${separatorColor}`, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative' }}>
           <div style={{ position: 'absolute', top: 40, left: 40, width: 128, height: 128, background: heroBlobA, borderRadius: '50%', filter: 'blur(48px)' }} />
@@ -174,8 +168,8 @@ export default function LoginPage() {
 
         <div style={{ width: '100%', maxWidth: 480, background: cardBg, borderRadius: 16, boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.3)' : '0 8px 30px rgba(0,0,0,0.06)', border: `1px solid ${cardBorder}`, padding: 40, transition: 'background 0.3s, border-color 0.3s' }}>
           <div style={{ marginBottom: 32 }}>
-            <h2 style={{ fontSize: 30, fontWeight: 800, color: titleColor, letterSpacing: '-0.02em', marginBottom: 8 }}>Bienvenue</h2>
-            <p style={{ fontSize: 15, color: subtitleColor, fontWeight: 500 }}>Connectez-vous pour accéder à votre espace d'intelligence décisionnelle.</p>
+            <h2 style={{ fontSize: 30, fontWeight: 800, color: titleColor, letterSpacing: '-0.02em', marginBottom: 8 }}>{t("login.title")}</h2>
+            <p style={{ fontSize: 15, color: subtitleColor, fontWeight: 500 }}>{t("login.subtitle") || "Connectez-vous pour accéder à votre espace d'intelligence décisionnelle."}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -188,15 +182,15 @@ export default function LoginPage() {
 
             <div className="space-y-5">
               <div className="flex flex-col gap-2">
-                <label style={{ fontSize: 13, fontWeight: 700, color: labelColor, marginLeft: 4 }}>Adresse e-mail</label>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="vous@universite.tn" required
+                <label style={{ fontSize: 13, fontWeight: 700, color: labelColor, marginLeft: 4 }}>{t("login.email")}</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder={t("login.email_placeholder") || "vous@universite.tn"} required
                   style={{ width: '100%', height: 52, borderRadius: 12, background: inputBg, border: `1px solid ${inputBorder}`, fontSize: 15, color: inputText, paddingLeft: 20, paddingRight: 20, outline: 'none', transition: 'all 0.2s' }}
                   onFocus={(e) => { e.currentTarget.style.borderColor = focusBorder; e.currentTarget.style.boxShadow = `0 0 0 3px ${focusRing}`; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = inputBorder; e.currentTarget.style.boxShadow = 'none'; }} />
               </div>
 
               <div className="flex flex-col gap-2">
-                <label style={{ fontSize: 13, fontWeight: 700, color: labelColor, marginLeft: 4 }}>Mot de passe</label>
+                <label style={{ fontSize: 13, fontWeight: 700, color: labelColor, marginLeft: 4 }}>{t("login.password")}</label>
                 <div className="relative">
                   <input type={showPassword ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required
                     style={{ width: '100%', height: 52, borderRadius: 12, background: inputBg, border: `1px solid ${inputBorder}`, fontSize: 15, color: inputText, paddingLeft: 20, paddingRight: 48, outline: 'none', transition: 'all 0.2s' }}
@@ -213,8 +207,8 @@ export default function LoginPage() {
             <div style={{ paddingTop: 8 }}>
               <button type="submit" disabled={loading}
                 style={{ width: '100%', height: 54, borderRadius: 12, fontWeight: 700, fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, background: btnBg, color: btnText, border: 'none', boxShadow: btnShadow, opacity: loading ? 0.7 : 1, transition: 'all 0.2s' }}>
-                {loading ? (<><div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /><span>Connexion en cours...</span></>)
-                  : (<span>Se connecter</span>)}
+                {loading ? (<><div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.3)', borderTopColor: 'white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /><span>{t("login.loading")}</span></>)
+                  : (<span>{t("login.button")}</span>)}
               </button>
               <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
             </div>
@@ -222,15 +216,15 @@ export default function LoginPage() {
             <div style={{ marginTop: 24 }}>
               <details className="group">
                 <summary style={{ fontSize: 14, fontWeight: 600, color: helpTextColor, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, width: 'fit-content', listStyle: 'none' }}>
-                  Obtenir de l'aide <ChevronDown size={16} className="group-open:rotate-180 transition-transform" />
+                  {t("login.help")} <ChevronDown size={16} className="group-open:rotate-180 transition-transform" />
                 </summary>
                 <div className="flex flex-col gap-3" style={{ paddingTop: 16 }}>
                   <a href="#" style={{ fontSize: 14, fontWeight: 600, color: helpTextColor, textDecoration: 'none' }}
                     onMouseEnter={(e) => { e.currentTarget.style.color = helpHoverColor; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = helpTextColor; }}>Mot de passe ou email oublié ?</a>
+                    onMouseLeave={(e) => { e.currentTarget.style.color = helpTextColor; }}>{t("login.forgot_password") || "Mot de passe oublié ?"}</a>
                   <a href="#" style={{ fontSize: 14, fontWeight: 600, color: helpTextColor, textDecoration: 'none' }}
                     onMouseEnter={(e) => { e.currentTarget.style.color = helpHoverColor; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = helpTextColor; }}>En savoir plus sur la connexion</a>
+                    onMouseLeave={(e) => { e.currentTarget.style.color = helpTextColor; }}>{t("login.learn_more") || "En savoir plus sur la connexion"}</a>
                 </div>
               </details>
             </div>
@@ -238,20 +232,20 @@ export default function LoginPage() {
 
           <div style={{ textAlign: 'center', marginTop: 32 }}>
             <p style={{ fontSize: 14, color: subtitleColor, fontWeight: 500 }}>
-              Vous n'avez pas encore de compte ?{" "}
-              <Link to="/register" style={{ color: linkColor, fontWeight: 700, textDecoration: 'none' }}>S'inscrire ici</Link>
+              {t("login.no_account")}{" "}
+              <Link to="/register" style={{ color: linkColor, fontWeight: 700, textDecoration: 'none' }}>{t("login.signup")}</Link>
             </p>
           </div>
 
           {/* Demo */}
           <div style={{ borderTop: `1px solid ${separatorColor}`, marginTop: 32, paddingTop: 32 }}>
-            <p style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 20, color: demoLabelColor, textAlign: 'center' }}>Accès démo rapide</p>
+            <p style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: 20, color: demoLabelColor, textAlign: 'center' }}>{t("login.demo_accounts")}</p>
             <div className="grid grid-cols-2 gap-3">
               {[
-                { role: "Président", email: "president@ucar.tn", pass: "president123" },
-                { role: "Doyen", email: "dean@ucar.tn", pass: "dean123" },
-                { role: "Admin", email: "admin@ucar.tn", pass: "admin123" },
-                { role: "Chercheur", email: "researcher@ucar.tn", pass: "researcher123" },
+                { role: t("register.roles.president"), email: "president@ucar.tn", pass: "president123" },
+                { role: t("register.roles.dean"), email: "dean@ucar.tn", pass: "dean123" },
+                { role: t("register.roles.admin"), email: "admin@ucar.tn", pass: "admin123" },
+                { role: t("register.roles.researcher"), email: "researcher@ucar.tn", pass: "researcher123" },
               ].map((d, i) => (
                 <button key={i} type="button" onClick={() => handleDemoLogin(d.email, d.pass)} disabled={loading}
                   style={{

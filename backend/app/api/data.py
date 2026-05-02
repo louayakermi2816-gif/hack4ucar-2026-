@@ -18,8 +18,6 @@ router = APIRouter(prefix="/api", tags=["data"])
 @router.get("/institutions")
 def list_institutions(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     query = db.query(Institution)
-    if user.role == "dean":
-        query = query.filter(Institution.id == user.institution_id)
     rows = query.order_by(Institution.name).all()
     return [
         {
@@ -27,6 +25,8 @@ def list_institutions(db: Session = Depends(get_db), user: User = Depends(get_cu
             "name": r.name,
             "institution_type": r.institution_type,
             "location": r.location,
+            "latitude": r.latitude,
+            "longitude": r.longitude,
         }
         for r in rows
     ]
@@ -44,6 +44,8 @@ def get_institution(inst_id: str, db: Session = Depends(get_db), user: User = De
         "name": inst.name,
         "institution_type": inst.institution_type,
         "location": inst.location,
+        "latitude": inst.latitude,
+        "longitude": inst.longitude,
     }
 
 

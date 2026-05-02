@@ -21,7 +21,13 @@ class Institution(Base):
     name             = Column(String, nullable=False)
     institution_type = Column(String, nullable=False)
     location         = Column(String, nullable=False)
+    
+    # Add these two lines:
+    latitude         = Column(Float, nullable=True)
+    longitude        = Column(Float, nullable=True)
+    
     created_at       = Column(DateTime(timezone=True), default=now_utc)
+
 
     documents              = relationship("Document",             back_populates="institution", cascade="all, delete-orphan")
     academic_records       = relationship("AcademicRecord",       back_populates="institution", cascade="all, delete-orphan")

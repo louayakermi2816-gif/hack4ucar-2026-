@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../auth";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../ThemeProvider";
 
 interface Institution { id: string; name: string; institution_type: string; }
 interface FacultySelectionModalProps { isOpen: boolean; onClose?: () => void; onSuccess?: () => void; }
@@ -12,18 +13,24 @@ interface FacultySelectionModalProps { isOpen: boolean; onClose?: () => void; on
 export default function FacultySelectionModal({ isOpen, onClose, onSuccess }: FacultySelectionModalProps) {
   const { updateInstitution, user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const accent = isDark ? '#D4AF37' : '#3b82f6';
+
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === "ar";
   const shouldShow = isOpen && user?.role === "dean";
 
   useEffect(() => {
     if (shouldShow && institutions.length === 0) {
       setLoading(true);
-      api.get("/api/institutions").then(res => setInstitutions(res.data)).catch(err => console.error("Failed to load institutions", err)).finally(() => setLoading(false));
+      api.get("/api/institutions")
+        .then(res => setInstitutions(res.data))
+        .catch(err => console.error("Failed to load institutions", err))
+        .finally(() => setLoading(false));
     }
   }, [shouldShow]);
 
@@ -44,65 +51,81 @@ export default function FacultySelectionModal({ isOpen, onClose, onSuccess }: Fa
     <AnimatePresence>
       {shouldShow && (<>
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/70 backdrop-blur-md z-50" />
+          className="fixed inset-0 z-50" style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }} />
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-zinc-900 border border-white/[0.08] shadow-2xl rounded-2xl z-50 overflow-hidden flex flex-col max-h-[85vh]"
-          style={{ boxShadow: "0 25px 80px rgba(0,0,0,0.6)", direction: isRTL ? 'rtl' : 'ltr' }}
+          className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl z-50 overflow-hidden flex flex-col"
+          style={{
+            maxHeight: '85vh', borderRadius: 20,
+            background: 'var(--uc-card-bg)', border: '1px solid var(--uc-border)',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.5)',
+          }}
         >
           {/* Header */}
-          <div className="p-6 border-b border-white/[0.06] bg-zinc-900">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500">
-                <Building2 size={24} />
+          <div style={{ padding: '28px 32px 20px', borderBottom: '1px solid var(--uc-border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
+              <div style={{ width: 48, height: 48, borderRadius: 14, background: `${accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Building2 size={24} style={{ color: accent }} />
               </div>
               <div>
-                <h2 className="text-[18px] font-bold text-zinc-100">{t("faculty_modal.title")}</h2>
-                <p className="text-[13px] text-zinc-500 font-medium mt-0.5">{t("faculty_modal.subtitle")}</p>
+                <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--uc-text)' }}>{t("faculty_modal.title")}</h2>
+                <p style={{ fontSize: 13, color: 'var(--uc-text-muted)', marginTop: 2 }}>{t("faculty_modal.subtitle")}</p>
               </div>
             </div>
-            <div className="relative">
-              <Search size={16} className={`absolute ${isRTL ? 'right-4' : 'left-4'} top-1/2 -translate-y-1/2 text-zinc-500`} />
+            <div style={{ position: 'relative' }}>
+              <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--uc-text-dim)' }} />
               <input type="text" placeholder={t("faculty_modal.search")}
                 value={search} onChange={e => setSearch(e.target.value)}
-                className={`w-full ${isRTL ? 'pr-11 pl-4' : 'pl-11 pr-4'} py-3.5 bg-zinc-800/50 border border-white/[0.06] rounded-xl text-[13px] font-medium text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-amber-500/40 transition-all`} />
+                style={{
+                  width: '100%', paddingLeft: 42, paddingRight: 16, paddingTop: 12, paddingBottom: 12,
+                  borderRadius: 12, fontSize: 13, fontWeight: 500,
+                  background: 'var(--uc-sidebar-hover-bg)', border: '1px solid var(--uc-border)',
+                  color: 'var(--uc-text)', outline: 'none',
+                }} />
             </div>
           </div>
 
           {/* List */}
-          <div className="flex-1 overflow-y-auto p-4 bg-zinc-950/50">
+          <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
             {loading ? (
-              <div className="flex justify-center py-10"><div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" /></div>
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
+                <div className="w-6 h-6 border-2 rounded-full animate-spin" style={{ borderColor: accent, borderTopColor: 'transparent' }} />
+              </div>
             ) : (
-              <div className="grid gap-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {filtered.map(inst => {
                   const isSelected = user?.institution_id === inst.id;
                   return (
                     <button key={inst.id} onClick={() => handleSelect(inst.id)} disabled={saving}
-                      className={`flex items-center justify-between p-4 rounded-xl border text-left transition-all cursor-pointer ${
-                        isSelected
-                          ? "bg-amber-500/10 border-amber-500/20 text-amber-400"
-                          : "bg-zinc-900 border-white/[0.04] hover:border-white/[0.1] hover:bg-zinc-800/50 text-zinc-200"
-                      } disabled:opacity-50`}>
+                      style={{
+                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        padding: '16px 20px', borderRadius: 14, textAlign: 'left', cursor: 'pointer',
+                        transition: 'all 0.2s', border: `1px solid ${isSelected ? accent + '30' : 'var(--uc-border)'}`,
+                        background: isSelected ? accent + '08' : 'var(--uc-sidebar-hover-bg)',
+                        opacity: saving ? 0.5 : 1, width: '100%',
+                      }}
+                      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.borderColor = accent + '40'; }}
+                      onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.borderColor = 'var(--uc-border)'; }}
+                    >
                       <div>
-                        <p className="font-semibold text-[14px]">{inst.name}</p>
-                        <p className="text-[11px] text-zinc-500 mt-1 uppercase tracking-widest font-medium">{inst.institution_type}</p>
+                        <p style={{ fontSize: 14, fontWeight: 600, color: isSelected ? accent : 'var(--uc-text)' }}>{inst.name}</p>
+                        <p style={{ fontSize: 11, fontWeight: 500, color: 'var(--uc-text-muted)', marginTop: 3, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{inst.institution_type}</p>
                       </div>
-                      {isSelected && <CheckCircle2 className="text-amber-500" size={20} />}
+                      {isSelected && <CheckCircle2 size={20} style={{ color: accent }} />}
                     </button>
                   );
                 })}
-                {filtered.length === 0 && <div className="text-center py-10 text-zinc-500 text-[14px] font-medium">{t("faculty_modal.none")}</div>}
+                {filtered.length === 0 && <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--uc-text-muted)', fontSize: 14 }}>{t("faculty_modal.none_found")}</div>}
               </div>
             )}
           </div>
 
           {/* Footer */}
           {onClose && (
-            <div className={`p-4 border-t border-white/[0.06] bg-zinc-900 flex ${isRTL ? 'justify-start' : 'justify-end'}`}>
-              <button onClick={onClose} className="px-5 py-2.5 text-[13px] font-medium text-zinc-500 hover:text-zinc-200 transition-colors cursor-pointer rounded-xl hover:bg-white/[0.04]">
+            <div style={{ padding: '12px 20px', borderTop: '1px solid var(--uc-border)', display: 'flex', justifyContent: 'flex-end' }}>
+              <button onClick={onClose} style={{ padding: '8px 20px', fontSize: 13, fontWeight: 500, color: 'var(--uc-text-muted)', cursor: 'pointer', borderRadius: 10, border: 'none', background: 'transparent', transition: 'color 0.2s' }}>
                 {t("faculty_modal.close")}
               </button>
             </div>
