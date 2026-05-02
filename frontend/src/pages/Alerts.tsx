@@ -5,6 +5,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import api from "../api";
+import { useTranslation } from "react-i18next";
 import SectionTitle from "../components/ui/SectionTitle";
 
 interface Alert {
@@ -23,7 +24,8 @@ const severityStyles: Record<string, string> = {
   LOW: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
 };
 
-export default function AlertsPage() {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === "ar";
   const [filterSeverity, setFilterSeverity] = useState("");
   const [filterDomain, setFilterDomain] = useState("");
 
@@ -48,11 +50,10 @@ export default function AlertsPage() {
       </div>
     );
 
-  return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
       <SectionTitle
-        title="Alertes"
-        subtitle="Anomalies détectées par le système"
+        title={t("alerts.title")}
+        subtitle={t("alerts.subtitle")}
         accentColor="border-red-500"
         accentBg="bg-red-500/10"
       />
@@ -64,17 +65,17 @@ export default function AlertsPage() {
           onChange={(e) => setFilterSeverity(e.target.value)}
           className="px-4 py-3 rounded-xl bg-zinc-900 border border-white/[0.06] text-zinc-200 text-[13px] font-medium focus:outline-none focus:border-amber-500/40 cursor-pointer"
         >
-          <option value="">Toutes les sévérités</option>
-          <option value="HIGH">🔴 Haute</option>
-          <option value="MEDIUM">🟡 Moyenne</option>
-          <option value="LOW">🟢 Basse</option>
+          <option value="">{t("alerts.all_severities")}</option>
+          <option value="HIGH">🔴 {t("alerts.high")}</option>
+          <option value="MEDIUM">🟡 {t("alerts.medium")}</option>
+          <option value="LOW">🟢 {t("alerts.low")}</option>
         </select>
         <select
           value={filterDomain}
           onChange={(e) => setFilterDomain(e.target.value)}
           className="px-4 py-3 rounded-xl bg-zinc-900 border border-white/[0.06] text-zinc-200 text-[13px] font-medium focus:outline-none focus:border-amber-500/40 cursor-pointer"
         >
-          <option value="">Tous les domaines</option>
+          <option value="">{t("alerts.all_domains")}</option>
           {domains.map((d: string) => (
             <option key={d} value={d}>
               {d}
@@ -107,16 +108,13 @@ export default function AlertsPage() {
                   : "—"}
               </span>
             </div>
-            {alert.message_fr && (
-              <p className="text-[14px] text-zinc-200 font-medium mb-1 leading-relaxed">
+            {alert.message_fr && !isRTL && (
+              <p className="text-[14px] text-zinc-200 font-medium mb-1 leading-relaxed text-left">
                 {alert.message_fr}
               </p>
             )}
-            {alert.message_ar && (
-              <p
-                className="text-[14px] text-zinc-400 text-right leading-relaxed"
-                dir="rtl"
-              >
+            {alert.message_ar && isRTL && (
+              <p className="text-[14px] text-zinc-200 font-medium leading-relaxed text-right" dir="rtl">
                 {alert.message_ar}
               </p>
             )}
@@ -124,7 +122,7 @@ export default function AlertsPage() {
         ))}
         {filtered.length === 0 && (
           <div className="text-center py-16 text-zinc-500 text-[14px] font-medium">
-            Aucune alerte trouvée
+            {t("alerts.none")}
           </div>
         )}
       </div>

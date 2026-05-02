@@ -21,8 +21,14 @@ export default function LoginPage() {
   const isDark = theme === "dark";
 
   useEffect(() => {
-    if (user && !showDeanModal && !loading) navigate("/", { replace: true });
-  }, [user, showDeanModal, loading, navigate]);
+    if (user && !loading) {
+      if (user.role === "dean" && !user.institution_id) {
+        setShowDeanModal(true);
+      } else if (!showDeanModal) {
+        navigate("/", { replace: true });
+      }
+    }
+  }, [user, loading, navigate, showDeanModal]);
 
   const toggleLanguage = () => {
     const nextLang = i18n.language === "fr" ? "en" : i18n.language === "en" ? "ar" : "fr";

@@ -1,18 +1,23 @@
 /**
- * AIChatBubble.tsx — Floating AI assistant bubble (WhatsApp Meta AI style).
+ * AIChatBubble.tsx — Premium floating AI assistant (glassmorphic dark terminal).
  *
  * Always visible in the bottom-right corner of the dashboard.
- * Click to expand into a mini chat window. Click again (or the X) to collapse.
+ * Click to expand into a polished chat window.
  */
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, X, Send, Minimize2 } from "lucide-react";
+import { Sparkles, X, Send, Bot } from "lucide-react";
 import api from "../api";
 
 interface Message {
   id: number;
   role: "user" | "assistant";
   content: string;
+  time: string;
+}
+
+function timeNow() {
+  return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
 export default function AIChatBubble() {
@@ -21,7 +26,8 @@ export default function AIChatBubble() {
     {
       id: 0,
       role: "assistant",
-      content: "Bonjour ! Je suis l'assistant IA UcarOS. Comment puis-je vous aider ? 🎓",
+      content: "Bonjour ! Je suis l'assistant IA UcarOS. Posez-moi une question sur les indicateurs de performance. 🎓",
+      time: timeNow(),
     },
   ]);
   const [input, setInput] = useState("");
@@ -34,16 +40,14 @@ export default function AIChatBubble() {
   }, [messages]);
 
   useEffect(() => {
-    if (open) {
-      setTimeout(() => inputRef.current?.focus(), 300);
-    }
+    if (open) setTimeout(() => inputRef.current?.focus(), 300);
   }, [open]);
 
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || loading) return;
 
-    const userMsg: Message = { id: Date.now(), role: "user", content: text };
+    const userMsg: Message = { id: Date.now(), role: "user", content: text, time: timeNow() };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
@@ -52,12 +56,12 @@ export default function AIChatBubble() {
       const res = await api.post("/api/chat", { message: text });
       setMessages((prev) => [
         ...prev,
-        { id: Date.now() + 1, role: "assistant", content: res.data.reply },
+        { id: Date.now() + 1, role: "assistant", content: res.data.reply, time: timeNow() },
       ]);
     } catch {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now() + 1, role: "assistant", content: "Désolé, une erreur s'est produite." },
+        { id: Date.now() + 1, role: "assistant", content: "Désolé, une erreur s'est produite. Réessayez.", time: timeNow() },
       ]);
     } finally {
       setLoading(false);
@@ -70,89 +74,140 @@ export default function AIChatBubble() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            initial={{ opacity: 0, y: 24, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, y: 24, scale: 0.92 }}
+            transition={{ type: "spring", damping: 28, stiffness: 350 }}
             className="fixed bottom-24 right-6 z-50 flex flex-col"
             style={{
-              width: 360,
-              height: 480,
-              borderRadius: 16,
-              background: '#161b22',
-              border: '1px solid rgba(255,255,255,0.08)',
-              boxShadow: '0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05)',
+              width: 380,
+              height: 520,
+              borderRadius: 20,
+              background: 'linear-gradient(180deg, #0f1419 0%, #0a0e14 100%)',
+              border: '1px solid rgba(212,175,55,0.12)',
+              boxShadow: '0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(212,175,55,0.06), 0 0 60px rgba(212,175,55,0.04)',
               overflow: 'hidden',
             }}
           >
             {/* Header */}
             <div
-              className="flex items-center gap-3 px-4 shrink-0"
               style={{
-                height: 56,
-                background: 'linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.04))',
+                padding: '16px 20px',
+                background: 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(212,175,55,0.02) 100%)',
                 borderBottom: '1px solid rgba(255,255,255,0.06)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
               }}
             >
               <div
-                className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-                style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 12,
+                  background: 'linear-gradient(135deg, #D4AF37, #8B7225)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
+                }}
               >
-                <Sparkles size={16} className="text-white" />
+                <Bot size={20} color="#0a0e17" />
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-semibold text-white leading-tight">Assistant IA</p>
-                <p className="text-[10px] leading-tight" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                  UcarOS • En ligne
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: '#f1f5f9', letterSpacing: '-0.01em' }}>
+                  Assistant IA
                 </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px rgba(34,197,94,0.5)' }} />
+                  <p style={{ fontSize: 11, color: '#64748b', fontWeight: 500 }}>
+                    UcarOS • En ligne
+                  </p>
+                </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer transition-colors"
-                style={{ color: 'rgba(255,255,255,0.4)' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'white'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.4)'; }}
+                style={{
+                  width: 32, height: 32, borderRadius: 10, border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: '#64748b', transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#f1f5f9'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = '#64748b'; }}
               >
-                <Minimize2 size={14} />
+                <X size={14} />
               </button>
             </div>
 
             {/* Messages */}
             <div
-              className="flex-1 overflow-y-auto px-4 py-3 flex flex-col gap-3"
-              style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}
+              style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '16px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 12,
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(212,175,55,0.15) transparent',
+              }}
             >
               {messages.map((msg) => (
-                <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div
-                    className="max-w-[85%] px-3.5 py-2.5 text-[13px] leading-relaxed"
-                    style={{
-                      borderRadius: msg.role === "user" ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
-                      background: msg.role === "user"
-                        ? 'linear-gradient(135deg, #f59e0b, #d97706)'
-                        : 'rgba(255,255,255,0.05)',
-                      color: msg.role === "user" ? '#0a0e17' : 'rgba(255,255,255,0.85)',
-                      border: msg.role === "user" ? 'none' : '1px solid rgba(255,255,255,0.06)',
-                    }}
-                  >
-                    {msg.content}
+                <div key={msg.id} style={{ display: 'flex', justifyContent: msg.role === "user" ? 'flex-end' : 'flex-start' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: msg.role === "user" ? 'flex-end' : 'flex-start', maxWidth: '82%' }}>
+                    {/* Avatar + Name */}
+                    {msg.role === "assistant" && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, paddingLeft: 2 }}>
+                        <Sparkles size={10} color="#D4AF37" />
+                        <span style={{ fontSize: 10, fontWeight: 600, color: '#D4AF37', textTransform: 'uppercase', letterSpacing: '0.05em' }}>UcarOS AI</span>
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        padding: '10px 14px',
+                        fontSize: 13,
+                        lineHeight: 1.6,
+                        fontWeight: 450,
+                        borderRadius: msg.role === "user" ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+                        background: msg.role === "user"
+                          ? 'linear-gradient(135deg, #D4AF37, #a38829)'
+                          : 'rgba(255,255,255,0.04)',
+                        color: msg.role === "user" ? '#0a0e17' : '#e2e8f0',
+                        border: msg.role === "user" ? 'none' : '1px solid rgba(255,255,255,0.06)',
+                        boxShadow: msg.role === "user" ? '0 4px 16px rgba(212,175,55,0.2)' : 'none',
+                      }}
+                    >
+                      {msg.content}
+                    </div>
+                    <span style={{ fontSize: 10, color: '#475569', marginTop: 4, paddingLeft: msg.role === "user" ? 0 : 2, paddingRight: msg.role === "user" ? 2 : 0 }}>
+                      {msg.time}
+                    </span>
                   </div>
                 </div>
               ))}
 
               {loading && (
-                <div className="flex justify-start">
-                  <div
-                    className="px-4 py-3 flex gap-1"
-                    style={{
-                      borderRadius: '14px 14px 14px 4px',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid rgba(255,255,255,0.06)',
-                    }}
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#f59e0b', animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#f59e0b', animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#f59e0b', animationDelay: '300ms' }} />
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, paddingLeft: 2 }}>
+                      <Sparkles size={10} color="#D4AF37" />
+                      <span style={{ fontSize: 10, fontWeight: 600, color: '#D4AF37', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>UcarOS AI</span>
+                    </div>
+                    <div
+                      style={{
+                        padding: '12px 18px',
+                        borderRadius: '16px 16px 16px 4px',
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                        display: 'flex',
+                        gap: 5,
+                        alignItems: 'center',
+                      }}
+                    >
+                      <span className="animate-bounce" style={{ width: 5, height: 5, borderRadius: '50%', background: '#D4AF37', display: 'inline-block', animationDelay: '0ms' }} />
+                      <span className="animate-bounce" style={{ width: 5, height: 5, borderRadius: '50%', background: '#D4AF37', display: 'inline-block', animationDelay: '150ms' }} />
+                      <span className="animate-bounce" style={{ width: 5, height: 5, borderRadius: '50%', background: '#D4AF37', display: 'inline-block', animationDelay: '300ms' }} />
+                    </div>
                   </div>
                 </div>
               )}
@@ -160,10 +215,16 @@ export default function AIChatBubble() {
               <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
+            {/* Input Area */}
             <div
-              className="px-3 py-3 flex gap-2 shrink-0"
-              style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.2)' }}
+              style={{
+                padding: '12px 16px',
+                borderTop: '1px solid rgba(255,255,255,0.06)',
+                background: 'rgba(0,0,0,0.3)',
+                display: 'flex',
+                gap: 10,
+                alignItems: 'center',
+              }}
             >
               <input
                 ref={inputRef}
@@ -173,24 +234,40 @@ export default function AIChatBubble() {
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                 placeholder="Posez votre question..."
                 disabled={loading}
-                className="flex-1 bg-transparent text-[13px] text-white focus:outline-none min-w-0"
                 style={{
-                  padding: '10px 14px',
+                  flex: 1,
+                  padding: '11px 16px',
                   borderRadius: 12,
-                  background: 'rgba(255,255,255,0.04)',
+                  background: 'rgba(255,255,255,0.05)',
                   border: '1px solid rgba(255,255,255,0.08)',
+                  color: '#e2e8f0',
+                  fontSize: 13,
+                  fontWeight: 500,
+                  outline: 'none',
+                  transition: 'border-color 0.2s',
                 }}
+                onFocus={(e) => { e.target.style.borderColor = 'rgba(212,175,55,0.3)'; }}
+                onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.08)'; }}
               />
               <button
                 onClick={sendMessage}
                 disabled={loading || !input.trim()}
-                className="shrink-0 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all disabled:opacity-30"
                 style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  border: 'none',
+                  width: 42,
+                  height: 42,
+                  borderRadius: 12,
+                  background: (loading || !input.trim()) ? 'rgba(255,255,255,0.04)' : 'linear-gradient(135deg, #D4AF37, #a38829)',
+                  border: (loading || !input.trim()) ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: (loading || !input.trim()) ? 'default' : 'pointer',
+                  transition: 'all 0.2s',
+                  boxShadow: (loading || !input.trim()) ? 'none' : '0 4px 16px rgba(212,175,55,0.25)',
+                  flexShrink: 0,
                 }}
               >
-                <Send size={16} style={{ color: '#0a0e17' }} />
+                <Send size={16} style={{ color: (loading || !input.trim()) ? '#475569' : '#0a0e17' }} />
               </button>
             </div>
           </motion.div>
@@ -206,10 +283,10 @@ export default function AIChatBubble() {
         style={{
           width: 56,
           height: 56,
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+          borderRadius: 16,
+          background: 'linear-gradient(135deg, #D4AF37, #8B7225)',
           border: 'none',
-          boxShadow: '0 6px 24px rgba(245,158,11,0.35), 0 0 0 4px rgba(245,158,11,0.1)',
+          boxShadow: '0 8px 32px rgba(212,175,55,0.35), 0 0 0 3px rgba(212,175,55,0.08)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -222,22 +299,22 @@ export default function AIChatBubble() {
             </motion.div>
           ) : (
             <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <Sparkles size={22} style={{ color: '#0a0e17' }} />
+              <Bot size={22} style={{ color: '#0a0e17' }} />
             </motion.div>
           )}
         </AnimatePresence>
       </motion.button>
 
-      {/* Pulse ring animation when closed */}
+      {/* Subtle glow ring when closed */}
       {!open && (
         <div
           className="fixed bottom-6 right-6 z-40 pointer-events-none"
           style={{
             width: 56,
             height: 56,
-            borderRadius: '50%',
-            border: '2px solid rgba(245,158,11,0.3)',
-            animation: 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+            borderRadius: 16,
+            border: '2px solid rgba(212,175,55,0.2)',
+            animation: 'ping 2.5s cubic-bezier(0, 0, 0.2, 1) infinite',
           }}
         />
       )}

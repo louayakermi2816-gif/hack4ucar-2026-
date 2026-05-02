@@ -24,7 +24,7 @@ import { ThemeProvider } from "./ThemeProvider.tsx";
 import "./i18n.ts";
 import "./index.css";
 
-// Pages — we'll create these next
+// Pages
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import Layout from "./components/Layout";
@@ -34,6 +34,15 @@ import InstitutionDetail from "./pages/InstitutionDetail";
 import AlertsPage from "./pages/Alerts";
 import UploadPage from "./pages/Upload";
 import Chat from "./pages/chat";
+import Enrollment from "./pages/Enrollment";
+import AcademicAffairs from "./pages/AcademicAffairs";
+import Research from "./pages/Research";
+import Finance from "./pages/Finance";
+import FacultyStaff from "./pages/FacultyStaff";
+import Facilities from "./pages/Facilities";
+import Strategy from "./pages/Strategy";
+import Analytics from "./pages/Analytics";
+import Settings from "./pages/Settings";
 
 
 // React Query client — caches API responses for 30 seconds
@@ -75,6 +84,15 @@ createRoot(document.getElementById("root")!).render(
                 }
               >
                 <Route index element={<Dashboard />} />
+                <Route path="enrollment" element={<Enrollment />} />
+                <Route path="academic" element={<AcademicAffairs />} />
+                <Route path="research" element={<Research />} />
+                <Route path="finance" element={<Finance />} />
+                <Route path="faculty" element={<FacultyStaff />} />
+                <Route path="facilities" element={<Facilities />} />
+                <Route path="strategy" element={<Strategy />} />
+                <Route path="analytics" element={<Analytics />} />
+                <Route path="settings" element={<Settings />} />
                 <Route path="institutions" element={<InstitutionsList />} />
                 <Route path="institutions/:id" element={<InstitutionDetail />} />
                 <Route path="upload" element={<UploadPage />} />

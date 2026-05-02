@@ -27,6 +27,113 @@
     "has_account": "لديك حساب بالفعل؟",
     "signin": "تسجيل الدخول"
   },
+  "nav": {
+    "dashboard": "لوحة القيادة",
+    "enrollment": "التسجيل",
+    "academic": "الشؤون الأكاديمية",
+    "research": "البحث والمنح",
+    "finance": "المالية",
+    "faculty": "هيئة التدريس",
+    "facilities": "البنية التحتية",
+    "strategy": "الاستراتيجية",
+    "analytics": "التحليلات",
+    "upload": "استيراد البيانات",
+    "settings": "الإعدادات",
+    "breadcrumb": "المستشار الجامعي"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "subtitle": "تهيئة وتفضيلات النظام",
+    "saved": "تم حفظ التعديلات",
+    "appearance": "المظهر",
+    "theme": "السمة",
+    "theme_desc": "اختر بين الوضع الداكن والوضع الفاتح",
+    "dark": "داكن",
+    "light": "فاتح",
+    "language": "اللغة",
+    "language_label": "لغة الواجهة",
+    "language_desc": "غيّر لغة عرض المنصة",
+    "profile": "الملف الشخصي",
+    "full_name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "role_label": "الدور",
+    "edit": "تعديل",
+    "save": "حفظ",
+    "notifications": "الإشعارات",
+    "kpi_alerts": "تنبيهات المؤشرات",
+    "kpi_alerts_desc": "استقبل تنبيهات عند تجاوز المؤشرات للحدود",
+    "weekly_reports": "التقارير الأسبوعية",
+    "weekly_reports_desc": "ملخص تلقائي كل يوم اثنين صباحاً",
+    "system_updates": "تحديثات النظام",
+    "system_updates_desc": "إشعارات الصيانة والمميزات الجديدة",
+    "security": "الأمان",
+    "2fa": "المصادقة الثنائية",
+    "2fa_desc": "أضف طبقة حماية إضافية",
+    "sessions": "الجلسات النشطة",
+    "sessions_desc": "جلستان نشطتان على هذا الجهاز",
+    "manage": "إدارة",
+    "system": "النظام",
+    "timezone": "المنطقة الزمنية",
+    "version": "الإصدار"
+  },
+  "alerts": {
+    "title": "التنبيهات",
+    "subtitle": "حالات شاذة اكتشفها النظام",
+    "all_severities": "كل المستويات",
+    "all_domains": "كل المجالات",
+    "high": "عالية",
+    "medium": "متوسطة",
+    "low": "منخفضة",
+    "none": "لا توجد تنبيهات"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "mark_read": "تحديد الكل كمقروء",
+    "view_all": "عرض كل الإشعارات",
+    "items": {
+      "dropout": "تم اكتشاف معدل تسرب مرتفع في FST",
+      "budget": "تم تنفيذ 92% من ميزانية الربع الثاني",
+      "report": "تقرير أسبوعي جديد متاح",
+      "publications": "تمت إضافة 3 منشورات جديدة"
+    }
+  },
+  "profile_menu": {
+    "my_profile": "ملفي الشخصي",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  },
+  "search": {
+    "placeholder": "...البحث في الصفحات"
+  },
+  "upload": {
+    "title": "استيراد البيانات",
+    "subtitle": "CSV, Excel أو PDF",
+    "institution": "المؤسسة",
+    "select_institution": "...اختر مؤسسة",
+    "drop_zone": "اسحب ملفاً هنا أو انقر للتصفح",
+    "file_types": "CSV, XLSX, XLS, PDF",
+    "button": "استيراد الملف",
+    "loading": "جاري الاستيراد...",
+    "success": "تم الاستيراد بنجاح",
+    "type_detected": "النوع المكتشف",
+    "rows_imported": "الصفوف المستوردة",
+    "access_denied": "وصول مرفوض",
+    "admin_only": "فقط المسؤول يمكنه استيراد الملفات"
+  },
+  "faculty_modal": {
+    "title": "اختر مؤسستك",
+    "subtitle": "اختر المؤسسة التي ترغب في إدارتها لهذه الجلسة.",
+    "search": "...ابحث عن كلية أو معهد",
+    "none": "لم يتم العثور على مؤسسات.",
+    "close": "إغلاق"
+  },
+  "roles": {
+    "admin": "مسؤول",
+    "president": "رئيس",
+    "dean": "عميد",
+    "researcher": "باحث",
+    "student": "طالب"
+  },
   "sidebar": {
     "dashboard": "لوحة القيادة",
     "institutions": "المؤسسات",

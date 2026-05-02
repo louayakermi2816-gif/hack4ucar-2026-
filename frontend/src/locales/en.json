@@ -27,6 +27,113 @@
     "has_account": "Already have an account?",
     "signin": "Sign In"
   },
+  "nav": {
+    "dashboard": "Dashboard",
+    "enrollment": "Enrollment",
+    "academic": "Academic Affairs",
+    "research": "Research & Grants",
+    "finance": "Finance",
+    "faculty": "Faculty & Staff",
+    "facilities": "Facilities",
+    "strategy": "Strategy",
+    "analytics": "Analytics",
+    "upload": "Import Data",
+    "settings": "Settings",
+    "breadcrumb": "University Chancellor"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "System configuration and preferences",
+    "saved": "Changes saved",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "theme_desc": "Choose between dark mode and light mode",
+    "dark": "Dark",
+    "light": "Light",
+    "language": "Language",
+    "language_label": "Interface Language",
+    "language_desc": "Change the platform display language",
+    "profile": "Profile",
+    "full_name": "Full Name",
+    "email": "Email",
+    "role_label": "Role",
+    "edit": "Edit",
+    "save": "Save",
+    "notifications": "Notifications",
+    "kpi_alerts": "KPI Alerts",
+    "kpi_alerts_desc": "Receive alerts when indicators exceed thresholds",
+    "weekly_reports": "Weekly Reports",
+    "weekly_reports_desc": "Automatic summary every Monday morning",
+    "system_updates": "System Updates",
+    "system_updates_desc": "Maintenance notifications and new features",
+    "security": "Security",
+    "2fa": "Two-Factor Auth",
+    "2fa_desc": "Add an extra layer of security",
+    "sessions": "Active Sessions",
+    "sessions_desc": "2 active sessions on this device",
+    "manage": "Manage",
+    "system": "System",
+    "timezone": "Timezone",
+    "version": "Version"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "subtitle": "System-detected anomalies",
+    "all_severities": "All Severities",
+    "all_domains": "All Domains",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
+    "none": "No alerts found"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "mark_read": "Mark all read",
+    "view_all": "View all notifications",
+    "items": {
+      "dropout": "High dropout rate detected at FST",
+      "budget": "Q2 Budget executed at 92%",
+      "report": "New weekly report available",
+      "publications": "3 new publications added"
+    }
+  },
+  "profile_menu": {
+    "my_profile": "My Profile",
+    "settings": "Settings",
+    "logout": "Sign Out"
+  },
+  "search": {
+    "placeholder": "Search pages..."
+  },
+  "upload": {
+    "title": "Data Import",
+    "subtitle": "CSV, Excel or PDF",
+    "institution": "Institution",
+    "select_institution": "Select an institution...",
+    "drop_zone": "Drag a file here or click to browse",
+    "file_types": "CSV, XLSX, XLS, PDF",
+    "button": "Import File",
+    "loading": "Importing...",
+    "success": "Import successful",
+    "type_detected": "Detected type",
+    "rows_imported": "Rows imported",
+    "access_denied": "Access Denied",
+    "admin_only": "Only administrators can import files"
+  },
+  "faculty_modal": {
+    "title": "Select your institution",
+    "subtitle": "Choose the institution you want to manage for this session.",
+    "search": "Search for a faculty or institute...",
+    "none": "No institutions found.",
+    "close": "Close"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "president": "President",
+    "dean": "Dean",
+    "researcher": "Researcher",
+    "student": "Student"
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "institutions": "Institutions",

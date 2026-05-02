@@ -27,6 +27,113 @@
     "has_account": "Déjà un compte ?",
     "signin": "Se connecter"
   },
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "enrollment": "Inscriptions",
+    "academic": "Affaires Académiques",
+    "research": "Recherche & Subventions",
+    "finance": "Finance",
+    "faculty": "Corps Enseignant",
+    "facilities": "Infrastructures",
+    "strategy": "Stratégie",
+    "analytics": "Analytique",
+    "upload": "Importer Données",
+    "settings": "Paramètres",
+    "breadcrumb": "Chancelier Universitaire"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "subtitle": "Configuration et préférences du système",
+    "saved": "Modifications enregistrées",
+    "appearance": "Apparence",
+    "theme": "Thème",
+    "theme_desc": "Choisissez entre le mode sombre et le mode clair",
+    "dark": "Sombre",
+    "light": "Clair",
+    "language": "Langue",
+    "language_label": "Langue d'interface",
+    "language_desc": "Changez la langue d'affichage de la plateforme",
+    "profile": "Profil",
+    "full_name": "Nom Complet",
+    "email": "E-mail",
+    "role_label": "Rôle",
+    "edit": "Modifier",
+    "save": "Sauver",
+    "notifications": "Notifications",
+    "kpi_alerts": "Alertes KPI",
+    "kpi_alerts_desc": "Recevez des alertes lorsque les indicateurs dépassent les seuils",
+    "weekly_reports": "Rapports Hebdomadaires",
+    "weekly_reports_desc": "Résumé automatique chaque lundi matin",
+    "system_updates": "Mises à jour Système",
+    "system_updates_desc": "Notifications de maintenance et nouvelles fonctionnalités",
+    "security": "Sécurité",
+    "2fa": "Authentification 2FA",
+    "2fa_desc": "Ajoutez une couche de sécurité supplémentaire",
+    "sessions": "Sessions Actives",
+    "sessions_desc": "2 sessions actives sur cet appareil",
+    "manage": "Gérer",
+    "system": "Système",
+    "timezone": "Fuseau Horaire",
+    "version": "Version"
+  },
+  "alerts": {
+    "title": "Alertes",
+    "subtitle": "Anomalies détectées par le système",
+    "all_severities": "Toutes les sévérités",
+    "all_domains": "Tous les domaines",
+    "high": "Haute",
+    "medium": "Moyenne",
+    "low": "Basse",
+    "none": "Aucune alerte trouvée"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "mark_read": "Tout marquer lu",
+    "view_all": "Voir toutes les notifications",
+    "items": {
+      "dropout": "Taux d'abandon élevé détecté à FST",
+      "budget": "Budget Q2 exécuté à 92%",
+      "report": "Nouveau rapport hebdomadaire disponible",
+      "publications": "3 nouvelles publications ajoutées"
+    }
+  },
+  "profile_menu": {
+    "my_profile": "Mon Profil",
+    "settings": "Paramètres",
+    "logout": "Se déconnecter"
+  },
+  "search": {
+    "placeholder": "Rechercher des pages..."
+  },
+  "upload": {
+    "title": "Importation de données",
+    "subtitle": "CSV, Excel ou PDF",
+    "institution": "Institution",
+    "select_institution": "Sélectionner une institution...",
+    "drop_zone": "Glissez un fichier ici ou cliquez pour parcourir",
+    "file_types": "CSV, XLSX, XLS, PDF",
+    "button": "Importer le fichier",
+    "loading": "Importation en cours...",
+    "success": "Importation réussie",
+    "type_detected": "Type détecté",
+    "rows_imported": "Lignes importées",
+    "access_denied": "Accès refusé",
+    "admin_only": "Seul l'administrateur peut importer des fichiers"
+  },
+  "faculty_modal": {
+    "title": "Sélectionnez votre établissement",
+    "subtitle": "Choisissez l'établissement que vous souhaitez gérer pour cette session.",
+    "search": "Rechercher une faculté ou un institut...",
+    "none": "Aucun établissement trouvé.",
+    "close": "Fermer"
+  },
+  "roles": {
+    "admin": "Administrateur",
+    "president": "Président",
+    "dean": "Doyen",
+    "researcher": "Chercheur",
+    "student": "Étudiant"
+  },
   "sidebar": {
     "dashboard": "Tableau de bord",
     "institutions": "Établissements",

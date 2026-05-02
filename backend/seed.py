@@ -106,7 +106,8 @@ def vary(base, pct=15):
 
 # ── Academic Records (2 semesters per institution) ────────────────────────
 print("Inserting academic records...")
-semesters = ["S1-2025", "S2-2025"]
+semesters = ["S1-2019", "S2-2019", "S1-2020", "S2-2020", "S1-2021", "S2-2021", "S1-2022", "S2-2022", "S1-2023", "S2-2023", "S1-2024", "S2-2024", "S1-2025", "S2-2025"]
+
 
 # Base rates by institution type
 base_rates = {
@@ -126,7 +127,7 @@ for inst in institutions:
             repetition_rate=vary(rates["repetition"]),
             dropout_rate=vary(rates["dropout"]),
         ))
-print(f"  + {len(institutions) * 2} academic records")
+print(f"  + {len(institutions) * 14} academic records")
 
 
 # ── Employment Records (2 years per institution) ─────────────────────────
@@ -139,7 +140,8 @@ base_employment = {
 
 for inst in institutions:
     emp = base_employment[inst.institution_type]
-    for year in [2024, 2025]:
+    for year in [2019, 2020, 2021, 2022, 2023, 2024, 2025]:
+
         db.add(EmploymentRecord(
             id=uuid.uuid4(), institution_id=inst.id, year=year,
             employability_rate=vary(emp["rate"]),
@@ -147,7 +149,7 @@ for inst in institutions:
             national_conventions=int(vary(emp["nat"], 30)),
             international_conventions=int(vary(emp["intl"], 30)),
         ))
-print(f"  + {len(institutions) * 2} employment records")
+print(f"  + {len(institutions) * 7} employment records")
 
 
 # ── Finance Records (2 quarters per institution) ─────────────────────────
@@ -164,7 +166,8 @@ departments = {
     "institut": ["Sciences Appliquées", "Technologies", "Langues", "Gestion"],
 }
 
-periods = ["Q1-2025", "Q2-2025"]
+periods = ["Q1-2019", "Q2-2019", "Q1-2020", "Q2-2020", "Q1-2021", "Q2-2021", "Q1-2022", "Q2-2022", "Q1-2023", "Q2-2023", "Q1-2024", "Q2-2024", "Q1-2025", "Q2-2025"]
+
 for inst in institutions:
     fin = base_finance[inst.institution_type]
     dept_list = departments[inst.institution_type]
@@ -227,7 +230,8 @@ base_research = {
 
 for inst in institutions:
     res = base_research[inst.institution_type]
-    for year in [2024, 2025]:
+    for year in [2019, 2020, 2021, 2022, 2023, 2024, 2025]:
+
         db.add(ResearchRecord(
             id=uuid.uuid4(), institution_id=inst.id, year=year,
             publications=int(vary(res["pubs"], 25)),

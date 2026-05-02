@@ -217,3 +217,97 @@ def alerts_summary(db: Session = Depends(get_db), user: User = Depends(get_curre
     results = q.group_by(Alert.severity).all()
 
     return {r.severity: r.count for r in results}
+
+
+@router.get("/trends")
+def trends(db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    """
+    Time-series aggregations for charts.
+    Returns academic, finance, research, and HR data grouped by period.
+    """
+    dean = _is_dean(user)
+
+    # Academic trends by semester
+    acad_q = db.query(
+        AcademicRecord.semester,
+        func.avg(AcademicRecord.success_rate).label("success_rate"),
+        func.avg(AcademicRecord.dropout_rate).label("dropout_rate"),
+        func.avg(AcademicRecord.attendance_rate).label("attendance_rate"),
+        func.sum(AcademicRecord.enrolled_students).label("enrolled"),
+    )
+    if dean:
+        acad_q = acad_q.filter(AcademicRecord.institution_id == user.institution_id)
+    acad_results = acad_q.group_by(AcademicRecord.semester).order_by(AcademicRecord.semester).all()
+
+    # Finance trends by period
+    fin_q = db.query(
+        FinanceRecord.period,
+        func.sum(FinanceRecord.budget_allocated).label("allocated"),
+        func.sum(FinanceRecord.budget_consumed).label("consumed"),
+        func.avg(FinanceRecord.cost_per_student).label("cost_per_student"),
+    )
+    if dean:
+        fin_q = fin_q.filter(FinanceRecord.institution_id == user.institution_id)
+    fin_results = fin_q.group_by(FinanceRecord.period).order_by(FinanceRecord.period).all()
+
+    # Research trends by year
+    res_q = db.query(
+        ResearchRecord.year,
+        func.sum(ResearchRecord.publications).label("publications"),
+        func.sum(ResearchRecord.patents).label("patents"),
+        func.sum(ResearchRecord.funding_secured).label("funding"),
+    )
+    if dean:
+        res_q = res_q.filter(ResearchRecord.institution_id == user.institution_id)
+    res_results = res_q.group_by(ResearchRecord.year).order_by(ResearchRecord.year).all()
+
+    # HR trends by period
+    hr_q = db.query(
+        HrRecord.period,
+        func.sum(HrRecord.teaching_staff_count).label("teaching"),
+        func.sum(HrRecord.admin_staff_count).label("admin"),
+        func.sum(HrRecord.training_hours).label("training"),
+    )
+    if dean:
+        hr_q = hr_q.filter(HrRecord.institution_id == user.institution_id)
+    hr_results = hr_q.group_by(HrRecord.period).order_by(HrRecord.period).all()
+
+    return {
+        "academic": [
+            {
+                "semester": r.semester,
+                "success_rate": round(float(r.success_rate), 1) if r.success_rate else 0,
+                "dropout_rate": round(float(r.dropout_rate), 1) if r.dropout_rate else 0,
+                "attendance_rate": round(float(r.attendance_rate), 1) if r.attendance_rate else 0,
+                "enrolled": int(r.enrolled) if r.enrolled else 0,
+            }
+            for r in acad_results
+        ],
+        "finance": [
+            {
+                "period": r.period,
+                "allocated": round(float(r.allocated), 0) if r.allocated else 0,
+                "consumed": round(float(r.consumed), 0) if r.consumed else 0,
+                "cost_per_student": round(float(r.cost_per_student), 0) if r.cost_per_student else 0,
+            }
+            for r in fin_results
+        ],
+        "research": [
+            {
+                "year": r.year,
+                "publications": int(r.publications) if r.publications else 0,
+                "patents": int(r.patents) if r.patents else 0,
+                "funding": round(float(r.funding), 0) if r.funding else 0,
+            }
+            for r in res_results
+        ],
+        "hr": [
+            {
+                "period": r.period,
+                "teaching": int(r.teaching) if r.teaching else 0,
+                "admin": int(r.admin) if r.admin else 0,
+                "training": int(r.training) if r.training else 0,
+            }
+            for r in hr_results
+        ],
+    }

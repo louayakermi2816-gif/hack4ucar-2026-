@@ -58,22 +58,28 @@ def public_register(
     if exists:
         raise HTTPException(409, "Email already registered")
 
-    user = User(
-        email=body.email,
-        hashed_password=hash_password(body.password),
-        full_name=body.full_name,
-        role=body.role,
-        institution_id=body.institution_id,
-    )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
+    try:
+        user = User(
+            email=body.email,
+            hashed_password=hash_password(body.password),
+            full_name=body.full_name,
+            role=body.role,
+            institution_id=body.institution_id if body.institution_id else None,
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    except Exception as e:
+        db.rollback()
+        import traceback; traceback.print_exc()
+        raise HTTPException(500, f"Registration error: {str(e)}")
 
     return UserResponse(
         id=str(user.id), email=user.email,
         full_name=user.full_name, role=user.role,
         institution_id=str(user.institution_id) if user.institution_id else None,
     )
+
 
 @router.post("/register", response_model=UserResponse)
 def register(
