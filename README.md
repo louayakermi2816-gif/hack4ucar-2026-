@@ -14,10 +14,7 @@ Real-time analytics, predictive ML models, and an AI assistant — all in one pr
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docker.com)
 
-<!-- 
-  Add your demo video/GIF here after recording:
-  ![UcarOS Demo](./docs/demo.gif)
--->
+### 🎬 [Watch Demo Video](https://github.com/louayakermi2816-gif/hack4ucar-2026-/releases/download/v1.0/demo-video.mp4)
 
 </div>
 
