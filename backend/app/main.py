@@ -11,7 +11,7 @@ from app.api.reports import router as reports_router
 import traceback
 
 
-app = FastAPI(title="HACK4UCAR 2025 API", version="0.1.0")
+app = FastAPI(title="HACK4UCAR 2026 API", version="0.1.0")
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):

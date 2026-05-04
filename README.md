@@ -2,7 +2,7 @@
 
 <div align="center">
 
-### 🏆 Hack4UCAR 2025 — University of Carthage
+### 🏆 Hack4UCAR 2026 — University of Carthage
 
 **UcarOS** is an AI-powered executive dashboard for university leadership.  
 Real-time analytics, predictive ML models, and an AI assistant — all in one premium interface.
@@ -106,8 +106,8 @@ Real-time analytics, predictive ML models, and an AI assistant — all in one pr
 
 ### 1. Clone & Setup
 ```bash
-git clone https://github.com/louayakermi2816-gif/hack4ucar-2025.git
-cd hack4ucar-2025
+git clone https://github.com/louayakermi2816-gif/hack4ucar-2026.git
+cd hack4ucar-2026
 ```
 
 ### 2. Environment Variables
@@ -154,24 +154,38 @@ Visit **http://localhost:5173** — login with demo accounts:
 
 ## 📸 Screenshots
 
-<!-- 
-  Replace these with actual screenshots from your platform.
-  Save screenshots in the docs/ folder, then uncomment:
-  
-  ### 🖥️ Dashboard
-  ![Dashboard](./docs/dashboard.png)
+### 🔐 Login Page
+![Login](./docs/login_page.png)
 
-  ### 🗺️ Interactive Map
-  ![Map](./docs/map.png)
+### 📊 Chancellor's Dashboard
+![Dashboard](./docs/dashboard_main.png)
 
-  ### 🤖 AI Chat
-  ![AI Chat](./docs/ai-chat.png)
+### 🗺️ Interactive Map — 33 Institutions
+![Map](./docs/dashboard_map.png)
 
-  ### 🔐 Login Page
-  ![Login](./docs/login.png)
--->
+### 📈 Enrollment & Headcounts
+![Enrollment](./docs/enrollment_page.png)
 
-> 📷 *Screenshots coming soon — see the demo video above*
+### 🎓 Academic Affairs
+![Academic](./docs/academic_page.png)
+
+### 💰 Finance & Budget
+![Finance](./docs/finance_page.png)
+
+### 🎯 Strategic Plan & Radar
+![Strategy](./docs/strategy_page.png)
+
+### 🤖 Advanced Analytics & AI Predictions
+![Analytics](./docs/analytics_page.png)
+
+### ☀️ Light Mode
+![Light Mode](./docs/dashboard_light_mode.png)
+
+### 🌍 Arabic RTL Layout
+![Arabic](./docs/dashboard_arabic.png)
+
+### 📁 Data Import (Admin)
+![Upload](./docs/upload_page.png)
 
 ---
 
@@ -191,10 +205,10 @@ Visit **http://localhost:5173** — login with demo accounts:
 
 ## 👥 Team
 
-Built for **Hack4UCAR 2025** — University of Carthage Hackathon
+Built for **Hack4UCAR 2026** — University of Carthage Hackathon
 
 ---
 
 ## 📄 License
 
-This project was built for the Hack4UCAR 2025 hackathon.
+This project was built for the Hack4UCAR 2026 hackathon.

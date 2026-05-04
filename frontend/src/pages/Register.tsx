@@ -181,7 +181,7 @@ export default function RegisterPage() {
                   <div style={{ position: 'relative' }}>
                     <Shield size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: accent }} />
                     <input type="password" name="secret_code" value={formData.secret_code} onChange={handleChange} required={needsSecretCode}
-                      placeholder="Ex: HACK_ADMIN_2025"
+                      placeholder="Ex: HACK_ADMIN_2026"
                       style={{ ...inputStyle, background: isDark ? 'rgba(212,175,55,0.04)' : 'rgba(59,130,246,0.04)', borderColor: isDark ? 'rgba(212,175,55,0.2)' : 'rgba(59,130,246,0.2)' }}
                       onFocus={e => e.target.style.borderColor = accent}
                       onBlur={e => e.target.style.borderColor = isDark ? 'rgba(212,175,55,0.2)' : 'rgba(59,130,246,0.2)'} />
@@ -210,7 +210,7 @@ export default function RegisterPage() {
         </form>
 
         <p style={{ textAlign: 'center', fontSize: 11, color: mutedText, marginTop: 20, fontWeight: 500 }}>
-          Universite de Carthage &copy; 2025
+          Universite de Carthage &copy; 2026
         </p>
       </motion.div>
     </div>

@@ -191,7 +191,7 @@
       "institutes": "Institutes"
     },
     "charts": {
-      "evolution": "Enrollment Evolution (2019-2025)",
+      "evolution": "Enrollment Evolution (2019-2026)",
       "enrolled": "Enrolled",
       "distribution": "Distribution by Type",
       "ranking": "Ranking by Success Rate",
@@ -361,7 +361,7 @@
       "delayed": "Delayed"
     },
     "title": "Strategic Plan",
-    "subtitle": "Strategic objectives tracking • Horizon 2025",
+    "subtitle": "Strategic objectives tracking • Horizon 2026",
     "charts": {
       "objectives": "Strategic Objectives",
       "radar_view": "Radar View"
@@ -422,7 +422,7 @@
     },
     "ai_preds": {
       "title": "AI Predictions",
-      "subtitle": "Scikit-learn models trained on historical data 2019-2025",
+      "subtitle": "Scikit-learn models trained on historical data 2019-2026",
       "dropout_risk": "Dropout Risk by Institution",
       "enrollment_forecast": "Enrollment Forecast 2026-2027",
       "budget_forecast": "Budget Forecast 2026",

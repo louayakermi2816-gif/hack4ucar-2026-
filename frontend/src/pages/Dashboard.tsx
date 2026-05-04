@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from "../auth";
 import DashboardMap from "../components/DashboardMap";
 import type { MapInstitution } from "../components/DashboardMap";
 import SmartInsights from "../components/SmartInsights";
@@ -19,6 +20,7 @@ import {
 export default function Dashboard() {
   const { theme } = useTheme();
   const { t } = useTranslation();
+  const { user } = useAuth();
   const isDark = theme === "dark";
   const accent = isDark ? '#D4AF37' : '#3b82f6';
   const accentLight = isDark ? 'rgba(212,175,55,0.35)' : 'rgba(59,130,246,0.35)';
@@ -246,14 +248,16 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {/* Interactive Map */}
-      <div className="animate-fade-in-up stagger-1" style={{ marginBottom: 16 }}>
-        <DashboardMap 
-          institutions={institutions} 
-          selectedIds={selectedMapIds} 
-          onToggleSelection={handleToggleSelection} 
-        />
-      </div>
+      {/* Interactive Map — only visible to president & admin */}
+      {(user?.role === "president" || user?.role === "admin") && (
+        <div className="animate-fade-in-up stagger-1" style={{ marginBottom: 16 }}>
+          <DashboardMap 
+            institutions={institutions} 
+            selectedIds={selectedMapIds} 
+            onToggleSelection={handleToggleSelection} 
+          />
+        </div>
+      )}
 
       {/* KPI Row 1 */}
       <div className="grid gap-5" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>

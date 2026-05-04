@@ -49,9 +49,9 @@ def public_register(
         raise HTTPException(400, "Invalid role. President role cannot be created via public registration.")
 
     # Secret Code Logic for Hackathon
-    if body.role == "admin" and body.secret_code != "HACK_ADMIN_2025":
+    if body.role == "admin" and body.secret_code != "HACK_ADMIN_2026":
         raise HTTPException(403, "Invalid authorization code for Admin role.")
-    if body.role == "dean" and body.secret_code != "HACK_DEAN_2025":
+    if body.role == "dean" and body.secret_code != "HACK_DEAN_2026":
         raise HTTPException(403, "Invalid authorization code for Dean role.")
 
     exists = db.query(User).filter(User.email == body.email).first()

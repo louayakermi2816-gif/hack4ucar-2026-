@@ -191,7 +191,7 @@
       "institutes": "Instituts"
     },
     "charts": {
-      "evolution": "Evolution des Inscriptions (2019-2025)",
+      "evolution": "Evolution des Inscriptions (2019-2026)",
       "enrolled": "Inscrits",
       "distribution": "Répartition par Type",
       "ranking": "Classement par Taux de Réussite",
@@ -361,7 +361,7 @@
       "delayed": "En Retard"
     },
     "title": "Plan Stratégique",
-    "subtitle": "Suivi des objectifs stratégiques • Horizon 2025",
+    "subtitle": "Suivi des objectifs stratégiques • Horizon 2026",
     "charts": {
       "objectives": "Objectifs Stratégiques",
       "radar_view": "Vue Radar"
@@ -422,7 +422,7 @@
     },
     "ai_preds": {
       "title": "Prédictions IA",
-      "subtitle": "Modèles scikit-learn entraînés sur les données historiques 2019-2025",
+      "subtitle": "Modèles scikit-learn entraînés sur les données historiques 2019-2026",
       "dropout_risk": "Risque d'Abandon par Établissement",
       "enrollment_forecast": "Prévision des Inscriptions 2026-2027",
       "budget_forecast": "Prévision Budgétaire 2026",

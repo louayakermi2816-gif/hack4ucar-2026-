@@ -98,7 +98,7 @@ def download_report(
     # Footer
     pdf.set_y(-15)
     pdf.set_font('helvetica', 'I', 8)
-    pdf.cell(0, 10, 'Generated automatically by UcarOS (Hack4UCAR 2025)', align='C')
+    pdf.cell(0, 10, 'Generated automatically by UcarOS (Hack4UCAR 2026)', align='C')
 
     # Save to temp file
     filename = f"/tmp/report_{uuid.uuid4().hex}.pdf"

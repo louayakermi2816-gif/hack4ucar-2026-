@@ -151,7 +151,7 @@ export default function Analytics() {
           {t("analytics.ai_preds.title") || "Prédictions IA"}
         </h2>
         <p style={{ color: 'var(--uc-text-muted)', fontSize: 12, marginTop: 4 }}>
-          {t("analytics.ai_preds.subtitle") || "Modèles scikit-learn entraînés sur les données historiques 2019-2025"}
+          {t("analytics.ai_preds.subtitle") || "Modèles scikit-learn entraînés sur les données historiques 2019-2026"}
         </p>
       </div>
 

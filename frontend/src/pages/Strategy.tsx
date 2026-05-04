@@ -38,7 +38,7 @@ export default function Strategy() {
         <h1 style={{ fontSize: 22, fontWeight: 700, color: accent, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
           {t("strategy.title") || "Plan Stratégique"}
         </h1>
-        <p style={{ color: 'var(--uc-text-muted)', fontSize: 13, marginTop: 4 }}>{t("strategy.subtitle") || "Suivi des objectifs stratégiques • Horizon 2025"}</p>
+        <p style={{ color: 'var(--uc-text-muted)', fontSize: 13, marginTop: 4 }}>{t("strategy.subtitle") || "Suivi des objectifs stratégiques • Horizon 2026"}</p>
       </div>
 
       {/* Summary KPIs */}
